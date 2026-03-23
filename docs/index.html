@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Legends Review — Code Reviews by Tech Legends</title>
+  <meta name="description" content="Code reviews by Elon Musk, Steve Jobs, and Linus Torvalds — powered by Claude Code Skills.">
+  <style>
+    :root {
+      --bg: #0d1117;
+      --surface: #161b22;
+      --border: #30363d;
+      --text: #e6edf3;
+      --text-muted: #8b949e;
+      --accent: #58a6ff;
+      --elon: #f97316;
+      --jobs: #a78bfa;
+      --linus: #34d399;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    .container { max-width: 960px; margin: 0 auto; padding: 0 24px; }
+
+    /* Hero */
+    .hero {
+      text-align: center;
+      padding: 80px 0 60px;
+    }
+
+    .hero h1 {
+      font-size: 3rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 8px;
+    }
+
+    .hero .icons {
+      font-size: 2.5rem;
+      margin-bottom: 16px;
+    }
+
+    .hero p {
+      font-size: 1.25rem;
+      color: var(--text-muted);
+      max-width: 600px;
+      margin: 0 auto 32px;
+    }
+
+    /* Install block */
+    .install {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px 20px;
+      font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+      font-size: 0.9rem;
+      color: var(--accent);
+      max-width: 720px;
+      margin: 0 auto 12px;
+      overflow-x: auto;
+      white-space: nowrap;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .install:hover { border-color: var(--accent); }
+
+    .install .copy-hint {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+    }
+
+    /* Cards */
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      padding: 60px 0;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 28px 24px;
+      transition: border-color 0.2s;
+    }
+
+    .card:hover { border-color: var(--text-muted); }
+
+    .card .icon { font-size: 2rem; margin-bottom: 12px; }
+
+    .card h3 {
+      font-size: 1.2rem;
+      margin-bottom: 4px;
+    }
+
+    .card .cmd {
+      font-family: monospace;
+      font-size: 0.85rem;
+      color: var(--accent);
+      margin-bottom: 12px;
+    }
+
+    .card p { color: var(--text-muted); font-size: 0.95rem; }
+
+    .card.elon  { border-top: 3px solid var(--elon); }
+    .card.jobs  { border-top: 3px solid var(--jobs); }
+    .card.linus { border-top: 3px solid var(--linus); }
+    .card.legends { border-top: 3px solid var(--accent); }
+
+    /* How it works */
+    .section {
+      padding: 40px 0 60px;
+      border-top: 1px solid var(--border);
+    }
+
+    .section h2 {
+      font-size: 1.8rem;
+      margin-bottom: 24px;
+      text-align: center;
+    }
+
+    .phases {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .phase {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 20px;
+      text-align: center;
+      flex: 1;
+      min-width: 200px;
+      max-width: 280px;
+    }
+
+    .phase .num {
+      display: inline-block;
+      width: 32px;
+      height: 32px;
+      line-height: 32px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: var(--bg);
+      font-weight: 700;
+      font-size: 0.9rem;
+      margin-bottom: 8px;
+    }
+
+    .phase h4 { margin-bottom: 4px; }
+    .phase p { color: var(--text-muted); font-size: 0.9rem; }
+
+    /* Quote */
+    .quote {
+      text-align: center;
+      padding: 40px 0;
+      border-top: 1px solid var(--border);
+    }
+
+    .quote blockquote {
+      font-size: 1.1rem;
+      font-style: italic;
+      color: var(--text-muted);
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 40px 0;
+      border-top: 1px solid var(--border);
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+
+    footer a { color: var(--accent); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+
+    /* Sample output */
+    .sample {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 24px;
+      max-width: 720px;
+      margin: 24px auto 0;
+      font-size: 0.9rem;
+    }
+
+    .sample table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 12px 0;
+    }
+
+    .sample th, .sample td {
+      text-align: left;
+      padding: 6px 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .sample th { color: var(--text-muted); font-weight: 600; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <section class="hero">
+      <div class="icons">&#x1F525; &#x1F34E; &#x1F427;</div>
+      <h1>Legends Review</h1>
+      <p>Code reviews by Elon Musk, Steve Jobs, and Linus Torvalds &mdash; powered by Claude Code Skills.</p>
+      <div class="install" onclick="navigator.clipboard.writeText(this.dataset.cmd)" data-cmd="curl -fsSL https://raw.githubusercontent.com/Atypical-Consulting/claude-legends-review/main/install.sh | bash">
+        curl -fsSL https://raw.githubusercontent.com/.../install.sh | bash
+        <span class="copy-hint">click to copy</span>
+      </div>
+    </section>
+
+    <section class="cards">
+      <div class="card elon">
+        <div class="icon">&#x1F525;</div>
+        <h3>Elon Review</h3>
+        <div class="cmd">/elon-review</div>
+        <p>First-principles thinking. Should this exist? Could it be 10x simpler? Are we shipping fast enough? What would I delete?</p>
+      </div>
+      <div class="card jobs">
+        <div class="icon">&#x1F34E;</div>
+        <h3>Jobs Review</h3>
+        <div class="cmd">/jobs-review</div>
+        <p>Design obsession. How does this feel to use? Does the API sing? Would you be proud to demo this? Say no to everything that doesn't earn its place.</p>
+      </div>
+      <div class="card linus">
+        <div class="icon">&#x1F427;</div>
+        <h3>Linus Review</h3>
+        <div class="cmd">/linus-review</div>
+        <p>Engineering rigor. Is this actually correct? Does the abstraction justify its existence? What breaks at 3 AM? Show me the code.</p>
+      </div>
+      <div class="card legends">
+        <div class="icon">&#x1F3DB;&#xFE0F;</div>
+        <h3>Legends Review</h3>
+        <div class="cmd">/legends-review</div>
+        <p>All three review independently, then debate in character until they reach consensus. Agreements, disagreements, and hard truths.</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>How Legends Review Works</h2>
+      <div class="phases">
+        <div class="phase">
+          <div class="num">1</div>
+          <h4>Independent Review</h4>
+          <p>Each legend reviews the code through their unique lens without seeing the others.</p>
+        </div>
+        <div class="phase">
+          <div class="num">2</div>
+          <h4>Debate</h4>
+          <p>They read each other's reviews and argue in character. Challenges, defenses, concessions.</p>
+        </div>
+        <div class="phase">
+          <div class="num">3</div>
+          <h4>Consensus</h4>
+          <p>Final ratings, unified actions, and three hard truths that survived the debate.</p>
+        </div>
+      </div>
+
+      <div class="sample">
+        <h4>&#x1F3DB;&#xFE0F; Sample Consensus Report</h4>
+        <table>
+          <tr><th>Reviewer</th><th>Rating</th><th>Verdict</th></tr>
+          <tr><td>&#x1F525; Elon</td><td>7/10</td><td>"Ship it, but delete the middleware layer &mdash; it solves yesterday's problem."</td></tr>
+          <tr><td>&#x1F34E; Steve</td><td>6/10</td><td>"The API works. It just doesn't sing."</td></tr>
+          <tr><td>&#x1F427; Linus</td><td>8/10</td><td>"The error handling is correct. That's rarer than you think."</td></tr>
+        </table>
+        <p><strong>Consensus Rating:</strong> 7/10</p>
+      </div>
+    </section>
+
+    <section class="quote">
+      <blockquote>"Three brilliant people arguing in a room &mdash; not polite agreement."</blockquote>
+    </section>
+
+    <footer>
+      <a href="https://github.com/Atypical-Consulting/claude-legends-review">GitHub</a> &middot;
+      MIT License &middot;
+      Built for <a href="https://docs.anthropic.com/en/docs/claude-code">Claude Code</a>
+    </footer>
+  </div>
+</body>
+</html>
