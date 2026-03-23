@@ -3,304 +3,1053 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Legends Review — Code Reviews by Tech Legends</title>
-  <meta name="description" content="Code reviews by Elon Musk, Steve Jobs, and Linus Torvalds — powered by Claude Code Skills.">
+  <title>Legends Review — Your Code, Reviewed by Titans</title>
+  <meta name="description" content="Summon Elon Musk, Steve Jobs, and Linus Torvalds to review your code. They argue until they agree. Claude Code Skills.">
+  <meta property="og:title" content="Legends Review">
+  <meta property="og:description" content="Code reviews by Elon Musk, Steve Jobs, and Linus Torvalds — they debate until consensus.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://atypical-consulting.github.io/claude-legends-review/">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,400;0,500;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #0d1117;
-      --surface: #161b22;
-      --border: #30363d;
-      --text: #e6edf3;
-      --text-muted: #8b949e;
-      --accent: #58a6ff;
-      --elon: #f97316;
-      --jobs: #a78bfa;
-      --linus: #34d399;
+      --bg: #08090d;
+      --surface: #0f1117;
+      --surface-raised: #151820;
+      --border: #1e2230;
+      --border-glow: #2a3040;
+      --text: #e8ecf4;
+      --text-dim: #6b7394;
+      --text-muted: #454d6b;
+      --elon: #ff6b2b;
+      --elon-glow: #ff6b2b33;
+      --jobs: #b48cff;
+      --jobs-glow: #b48cff33;
+      --linus: #2dd4a8;
+      --linus-glow: #2dd4a833;
+      --gold: #fbbf24;
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
+    html { scroll-behavior: smooth; }
+
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+      font-family: 'DM Sans', sans-serif;
       background: var(--bg);
       color: var(--text);
-      line-height: 1.6;
+      line-height: 1.65;
+      overflow-x: hidden;
     }
 
-    .container { max-width: 960px; margin: 0 auto; padding: 0 24px; }
+    /* ── Grain overlay ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      pointer-events: none;
+      opacity: 0.025;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 128px 128px;
+    }
 
-    /* Hero */
+    /* ── Scroll reveal ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── Layout ── */
+    .wrap { max-width: 1100px; margin: 0 auto; padding: 0 28px; }
+
+    /* ══════════════════════════════════════════════
+       HERO
+    ══════════════════════════════════════════════ */
     .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
       text-align: center;
-      padding: 80px 0 60px;
+      padding: 80px 28px 60px;
+      overflow: hidden;
+    }
+
+    /* Radial glow behind hero */
+    .hero::before {
+      content: '';
+      position: absolute;
+      width: 900px;
+      height: 900px;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -55%);
+      background: radial-gradient(
+        circle,
+        rgba(180, 140, 255, 0.06) 0%,
+        rgba(255, 107, 43, 0.04) 30%,
+        transparent 70%
+      );
+      pointer-events: none;
+    }
+
+    /* Orbiting rings */
+    .hero-rings {
+      position: absolute;
+      width: 600px;
+      height: 600px;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -52%);
+      pointer-events: none;
+    }
+    .hero-rings .ring {
+      position: absolute;
+      inset: 0;
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      opacity: 0.3;
+    }
+    .hero-rings .ring:nth-child(1) { animation: spin 60s linear infinite; }
+    .hero-rings .ring:nth-child(2) { inset: 60px; animation: spin 45s linear infinite reverse; border-style: dashed; }
+    .hero-rings .ring:nth-child(3) { inset: 140px; animation: spin 80s linear infinite; }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .hero-badge {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 16px;
+      background: var(--surface-raised);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.78rem;
+      color: var(--text-dim);
+      margin-bottom: 40px;
+      letter-spacing: 0.04em;
+    }
+    .hero-badge .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--linus);
+      animation: pulse-dot 2s ease-in-out infinite;
+    }
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(45, 212, 168, 0.4); }
+      50% { opacity: 0.6; box-shadow: 0 0 0 6px rgba(45, 212, 168, 0); }
     }
 
     .hero h1 {
-      font-size: 3rem;
+      position: relative;
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(3rem, 8vw, 6rem);
       font-weight: 800;
-      letter-spacing: -0.02em;
-      margin-bottom: 8px;
+      letter-spacing: -0.035em;
+      line-height: 1.05;
+      margin-bottom: 24px;
+    }
+    .hero h1 .line { display: block; }
+    .hero h1 .line:first-child { color: var(--text-dim); font-weight: 600; font-size: 0.45em; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 8px; }
+    .hero h1 .gradient {
+      background: linear-gradient(135deg, var(--elon) 0%, var(--jobs) 50%, var(--linus) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
 
-    .hero .icons {
-      font-size: 2.5rem;
-      margin-bottom: 16px;
+    .hero-sub {
+      position: relative;
+      font-size: 1.2rem;
+      color: var(--text-dim);
+      max-width: 520px;
+      margin-bottom: 48px;
+      line-height: 1.7;
     }
 
-    .hero p {
-      font-size: 1.25rem;
-      color: var(--text-muted);
-      max-width: 600px;
-      margin: 0 auto 32px;
+    /* Personas floating */
+    .hero-personas {
+      display: flex;
+      gap: 48px;
+      margin-bottom: 48px;
+      position: relative;
+    }
+    .hero-persona {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      animation: float 6s ease-in-out infinite;
+    }
+    .hero-persona:nth-child(2) { animation-delay: -2s; }
+    .hero-persona:nth-child(3) { animation-delay: -4s; }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
     }
 
-    /* Install block */
-    .install {
+    .persona-orb {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      position: relative;
+    }
+    .persona-orb::before {
+      content: '';
+      position: absolute;
+      inset: -4px;
+      border-radius: 50%;
+      padding: 2px;
+      background: conic-gradient(from 0deg, transparent 60%, currentColor 100%);
+      -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 2px), #000 calc(100% - 2px));
+      mask: radial-gradient(farthest-side, transparent calc(100% - 2px), #000 calc(100% - 2px));
+      animation: spin 4s linear infinite;
+    }
+    .elon-orb { background: var(--elon-glow); color: var(--elon); }
+    .jobs-orb { background: var(--jobs-glow); color: var(--jobs); }
+    .linus-orb { background: var(--linus-glow); color: var(--linus); }
+
+    .persona-name {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .persona-name.elon { color: var(--elon); }
+    .persona-name.jobs { color: var(--jobs); }
+    .persona-name.linus { color: var(--linus); }
+
+    /* Install CTA */
+    .install-block {
+      position: relative;
+      width: 100%;
+      max-width: 640px;
+    }
+    .install-cmd {
+      width: 100%;
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 16px 20px;
-      font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
-      font-size: 0.9rem;
-      color: var(--accent);
-      max-width: 720px;
-      margin: 0 auto 12px;
+      border-radius: 12px;
+      padding: 18px 56px 18px 20px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.85rem;
+      color: var(--linus);
+      cursor: pointer;
+      transition: border-color 0.3s, box-shadow 0.3s;
       overflow-x: auto;
       white-space: nowrap;
-      position: relative;
-      cursor: pointer;
+      text-align: left;
     }
-
-    .install:hover { border-color: var(--accent); }
-
-    .install .copy-hint {
+    .install-cmd:hover {
+      border-color: var(--linus);
+      box-shadow: 0 0 30px -10px var(--linus-glow);
+    }
+    .install-cmd .prompt { color: var(--text-muted); user-select: none; }
+    .install-copy {
       position: absolute;
       right: 12px;
       top: 50%;
       transform: translateY(-50%);
+      background: var(--surface-raised);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 6px 10px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--text-dim);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .install-copy:hover { color: var(--text); border-color: var(--text-dim); }
+
+    /* ══════════════════════════════════════════════
+       REVIEWERS SECTION
+    ══════════════════════════════════════════════ */
+    .reviewers {
+      padding: 100px 0;
+      position: relative;
+    }
+
+    .section-label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
       color: var(--text-muted);
-      font-size: 0.75rem;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+      text-align: center;
+      margin-bottom: 16px;
+    }
+    .section-title {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 700;
+      text-align: center;
+      letter-spacing: -0.02em;
+      margin-bottom: 64px;
     }
 
-    /* Cards */
-    .cards {
+    .reviewer-cards {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 20px;
-      padding: 60px 0;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
     }
 
-    .card {
+    @media (max-width: 820px) {
+      .reviewer-cards { grid-template-columns: 1fr; max-width: 440px; margin: 0 auto; }
+    }
+
+    .r-card {
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 28px 24px;
-      transition: border-color 0.2s;
+      border-radius: 16px;
+      padding: 36px 28px 32px;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+                  border-color 0.3s,
+                  box-shadow 0.4s;
+    }
+    .r-card:hover {
+      transform: translateY(-6px);
+    }
+    .r-card.elon:hover { border-color: var(--elon); box-shadow: 0 20px 60px -20px var(--elon-glow); }
+    .r-card.jobs:hover { border-color: var(--jobs); box-shadow: 0 20px 60px -20px var(--jobs-glow); }
+    .r-card.linus:hover { border-color: var(--linus); box-shadow: 0 20px 60px -20px var(--linus-glow); }
+
+    /* Glow line at top */
+    .r-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .r-card:hover::before { opacity: 1; }
+    .r-card.elon::before { background: linear-gradient(90deg, transparent, var(--elon), transparent); }
+    .r-card.jobs::before { background: linear-gradient(90deg, transparent, var(--jobs), transparent); }
+    .r-card.linus::before { background: linear-gradient(90deg, transparent, var(--linus), transparent); }
+
+    /* Background glyph */
+    .r-card::after {
+      content: attr(data-glyph);
+      position: absolute;
+      right: -10px;
+      bottom: -20px;
+      font-size: 8rem;
+      opacity: 0.03;
+      pointer-events: none;
+      line-height: 1;
     }
 
-    .card:hover { border-color: var(--text-muted); }
+    .r-card-icon {
+      font-size: 2.4rem;
+      margin-bottom: 20px;
+    }
 
-    .card .icon { font-size: 2rem; margin-bottom: 12px; }
-
-    .card h3 {
-      font-size: 1.2rem;
+    .r-card h3 {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.35rem;
+      font-weight: 700;
       margin-bottom: 4px;
     }
+    .r-card .r-cmd {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.78rem;
+      margin-bottom: 16px;
+    }
+    .r-card.elon .r-cmd { color: var(--elon); }
+    .r-card.jobs .r-cmd { color: var(--jobs); }
+    .r-card.linus .r-cmd { color: var(--linus); }
 
-    .card .cmd {
-      font-family: monospace;
-      font-size: 0.85rem;
-      color: var(--accent);
-      margin-bottom: 12px;
+    .r-card p {
+      color: var(--text-dim);
+      font-size: 0.92rem;
+      margin-bottom: 20px;
+      line-height: 1.65;
     }
 
-    .card p { color: var(--text-muted); font-size: 0.95rem; }
+    .r-card blockquote {
+      font-style: italic;
+      font-size: 0.88rem;
+      padding-left: 14px;
+      position: relative;
+    }
+    .r-card blockquote::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 2px;
+      bottom: 2px;
+      width: 2px;
+      border-radius: 2px;
+    }
+    .r-card.elon blockquote { color: var(--elon); }
+    .r-card.elon blockquote::before { background: var(--elon); }
+    .r-card.jobs blockquote { color: var(--jobs); }
+    .r-card.jobs blockquote::before { background: var(--jobs); }
+    .r-card.linus blockquote { color: var(--linus); }
+    .r-card.linus blockquote::before { background: var(--linus); }
 
-    .card.elon  { border-top: 3px solid var(--elon); }
-    .card.jobs  { border-top: 3px solid var(--jobs); }
-    .card.linus { border-top: 3px solid var(--linus); }
-    .card.legends { border-top: 3px solid var(--accent); }
-
-    /* How it works */
-    .section {
-      padding: 40px 0 60px;
-      border-top: 1px solid var(--border);
+    /* Assessment pills */
+    .r-card .areas {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 20px;
+    }
+    .r-card .areas span {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.68rem;
+      padding: 3px 10px;
+      border-radius: 100px;
+      border: 1px solid var(--border);
+      color: var(--text-dim);
     }
 
-    .section h2 {
-      font-size: 1.8rem;
-      margin-bottom: 24px;
+    /* ══════════════════════════════════════════════
+       TERMINAL DEMO
+    ══════════════════════════════════════════════ */
+    .demo {
+      padding: 100px 0;
+    }
+
+    .terminal {
+      background: #0c0e14;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+      max-width: 780px;
+      margin: 0 auto;
+      box-shadow: 0 40px 100px -30px rgba(0, 0, 0, 0.6);
+    }
+
+    .terminal-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 18px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+    }
+    .terminal-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--border-glow);
+    }
+    .terminal-dot:nth-child(1) { background: #ff5f57; }
+    .terminal-dot:nth-child(2) { background: #febc2e; }
+    .terminal-dot:nth-child(3) { background: #28c840; }
+    .terminal-title {
+      flex: 1;
       text-align: center;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--text-muted);
     }
 
-    .phases {
+    .terminal-body {
+      padding: 24px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.82rem;
+      line-height: 1.85;
+      min-height: 340px;
+    }
+    .terminal-body .t-prompt { color: var(--linus); }
+    .terminal-body .t-cmd { color: var(--text); }
+    .terminal-body .t-dim { color: var(--text-muted); }
+    .terminal-body .t-elon { color: var(--elon); }
+    .terminal-body .t-jobs { color: var(--jobs); }
+    .terminal-body .t-linus { color: var(--linus); }
+    .terminal-body .t-gold { color: var(--gold); }
+    .terminal-body .t-line { margin-bottom: 2px; }
+
+    .cursor {
+      display: inline-block;
+      width: 8px;
+      height: 16px;
+      background: var(--text);
+      vertical-align: text-bottom;
+      animation: blink 1s step-end infinite;
+    }
+    @keyframes blink { 50% { opacity: 0; } }
+
+    /* ══════════════════════════════════════════════
+       HOW IT WORKS — FLOW
+    ══════════════════════════════════════════════ */
+    .flow {
+      padding: 100px 0;
+    }
+
+    .flow-steps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+      position: relative;
+      max-width: 860px;
+      margin: 0 auto;
+    }
+
+    @media (max-width: 720px) {
+      .flow-steps { grid-template-columns: 1fr; gap: 24px; }
+      .flow-connector { display: none; }
+    }
+
+    /* Connecting line */
+    .flow-steps::before {
+      content: '';
+      position: absolute;
+      top: 36px;
+      left: 15%;
+      right: 15%;
+      height: 1px;
+      background: linear-gradient(90deg, var(--elon), var(--jobs), var(--linus));
+      opacity: 0.3;
+    }
+
+    .flow-step {
+      text-align: center;
+      padding: 0 20px;
+    }
+
+    .flow-num {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Syne', sans-serif;
+      font-size: 1.6rem;
+      font-weight: 800;
+      margin-bottom: 20px;
+      position: relative;
+      z-index: 1;
+    }
+    .flow-step:nth-child(1) .flow-num { background: var(--elon-glow); color: var(--elon); border: 1px solid rgba(255,107,43,0.2); }
+    .flow-step:nth-child(2) .flow-num { background: var(--jobs-glow); color: var(--jobs); border: 1px solid rgba(180,140,255,0.2); }
+    .flow-step:nth-child(3) .flow-num { background: var(--linus-glow); color: var(--linus); border: 1px solid rgba(45,212,168,0.2); }
+
+    .flow-step h4 {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .flow-step p {
+      color: var(--text-dim);
+      font-size: 0.88rem;
+    }
+
+    /* ══════════════════════════════════════════════
+       CONSENSUS PREVIEW
+    ══════════════════════════════════════════════ */
+    .consensus {
+      padding: 0 0 100px;
+    }
+
+    .consensus-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      max-width: 780px;
+      margin: 0 auto;
+      overflow: hidden;
+    }
+
+    .consensus-header {
+      padding: 24px 32px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .consensus-header h3 {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+    }
+    .consensus-rating {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--gold);
+    }
+
+    .consensus-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .consensus-table tr { border-bottom: 1px solid var(--border); }
+    .consensus-table tr:last-child { border-bottom: none; }
+    .consensus-table td {
+      padding: 16px 32px;
+      font-size: 0.88rem;
+      vertical-align: top;
+    }
+    .consensus-table td:first-child {
+      width: 110px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.78rem;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .consensus-table .verdict {
+      color: var(--text-dim);
+      font-style: italic;
+    }
+    .consensus-table .rating {
+      width: 60px;
+      text-align: right;
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+    }
+
+    .consensus-footer {
+      padding: 20px 32px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+    .consensus-tag {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.72rem;
+      padding: 4px 12px;
+      border-radius: 100px;
+      border: 1px solid var(--border);
+      color: var(--text-dim);
+    }
+
+    /* ══════════════════════════════════════════════
+       CTA BANNER
+    ══════════════════════════════════════════════ */
+    .cta {
+      padding: 100px 0;
+      text-align: center;
+      position: relative;
+    }
+    .cta::before {
+      content: '';
+      position: absolute;
+      width: 700px;
+      height: 400px;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: radial-gradient(
+        ellipse,
+        rgba(180, 140, 255, 0.05) 0%,
+        transparent 70%
+      );
+      pointer-events: none;
+    }
+    .cta h2 {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(1.6rem, 4vw, 2.6rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 12px;
+      position: relative;
+    }
+    .cta p {
+      color: var(--text-dim);
+      font-size: 1rem;
+      margin-bottom: 36px;
+      position: relative;
+    }
+    .cta-buttons {
       display: flex;
       gap: 16px;
       justify-content: center;
       flex-wrap: wrap;
+      position: relative;
     }
-
-    .phase {
-      background: var(--surface);
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 28px;
+      border-radius: 10px;
+      font-family: 'Syne', sans-serif;
+      font-weight: 600;
+      font-size: 0.95rem;
+      text-decoration: none;
+      transition: all 0.3s;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--elon), var(--jobs));
+      color: #fff;
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 40px -10px rgba(180, 140, 255, 0.35); }
+    .btn-ghost {
+      background: transparent;
       border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 20px;
-      text-align: center;
-      flex: 1;
-      min-width: 200px;
-      max-width: 280px;
+      color: var(--text);
+    }
+    .btn-ghost:hover { border-color: var(--text-dim); background: var(--surface); }
+
+    .btn svg {
+      width: 18px;
+      height: 18px;
+      fill: currentColor;
     }
 
-    .phase .num {
-      display: inline-block;
-      width: 32px;
-      height: 32px;
-      line-height: 32px;
-      border-radius: 50%;
-      background: var(--accent);
-      color: var(--bg);
-      font-weight: 700;
-      font-size: 0.9rem;
-      margin-bottom: 8px;
-    }
-
-    .phase h4 { margin-bottom: 4px; }
-    .phase p { color: var(--text-muted); font-size: 0.9rem; }
-
-    /* Quote */
-    .quote {
-      text-align: center;
-      padding: 40px 0;
-      border-top: 1px solid var(--border);
-    }
-
-    .quote blockquote {
-      font-size: 1.1rem;
-      font-style: italic;
-      color: var(--text-muted);
-      max-width: 500px;
-      margin: 0 auto;
-    }
-
-    /* Footer */
+    /* ══════════════════════════════════════════════
+       FOOTER
+    ══════════════════════════════════════════════ */
     footer {
       text-align: center;
-      padding: 40px 0;
+      padding: 40px 28px;
       border-top: 1px solid var(--border);
       color: var(--text-muted);
-      font-size: 0.85rem;
+      font-size: 0.8rem;
     }
+    footer a { color: var(--text-dim); text-decoration: none; transition: color 0.2s; }
+    footer a:hover { color: var(--text); }
+    footer .footer-links { display: flex; gap: 24px; justify-content: center; margin-bottom: 12px; }
 
-    footer a { color: var(--accent); text-decoration: none; }
-    footer a:hover { text-decoration: underline; }
-
-    /* Sample output */
-    .sample {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 24px;
-      max-width: 720px;
-      margin: 24px auto 0;
-      font-size: 0.9rem;
+    /* ══════════════════════════════════════════════
+       RESPONSIVE
+    ══════════════════════════════════════════════ */
+    @media (max-width: 600px) {
+      .hero-personas { gap: 24px; }
+      .persona-orb { width: 56px; height: 56px; font-size: 1.5rem; }
+      .terminal-body { padding: 16px; font-size: 0.75rem; }
+      .consensus-table td { padding: 12px 16px; }
+      .consensus-header { padding: 16px; }
     }
-
-    .sample table {
-      width: 100%;
-      border-collapse: collapse;
-      margin: 12px 0;
-    }
-
-    .sample th, .sample td {
-      text-align: left;
-      padding: 6px 12px;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .sample th { color: var(--text-muted); font-weight: 600; }
   </style>
 </head>
 <body>
-  <div class="container">
-    <section class="hero">
-      <div class="icons">&#x1F525; &#x1F34E; &#x1F427;</div>
-      <h1>Legends Review</h1>
-      <p>Code reviews by Elon Musk, Steve Jobs, and Linus Torvalds &mdash; powered by Claude Code Skills.</p>
-      <div class="install" onclick="navigator.clipboard.writeText(this.dataset.cmd)" data-cmd="curl -fsSL https://raw.githubusercontent.com/Atypical-Consulting/claude-legends-review/main/install.sh | bash">
-        curl -fsSL https://raw.githubusercontent.com/.../install.sh | bash
-        <span class="copy-hint">click to copy</span>
-      </div>
-    </section>
 
-    <section class="cards">
-      <div class="card elon">
-        <div class="icon">&#x1F525;</div>
-        <h3>Elon Review</h3>
-        <div class="cmd">/elon-review</div>
-        <p>First-principles thinking. Should this exist? Could it be 10x simpler? Are we shipping fast enough? What would I delete?</p>
-      </div>
-      <div class="card jobs">
-        <div class="icon">&#x1F34E;</div>
-        <h3>Jobs Review</h3>
-        <div class="cmd">/jobs-review</div>
-        <p>Design obsession. How does this feel to use? Does the API sing? Would you be proud to demo this? Say no to everything that doesn't earn its place.</p>
-      </div>
-      <div class="card linus">
-        <div class="icon">&#x1F427;</div>
-        <h3>Linus Review</h3>
-        <div class="cmd">/linus-review</div>
-        <p>Engineering rigor. Is this actually correct? Does the abstraction justify its existence? What breaks at 3 AM? Show me the code.</p>
-      </div>
-      <div class="card legends">
-        <div class="icon">&#x1F3DB;&#xFE0F;</div>
-        <h3>Legends Review</h3>
-        <div class="cmd">/legends-review</div>
-        <p>All three review independently, then debate in character until they reach consensus. Agreements, disagreements, and hard truths.</p>
-      </div>
-    </section>
+  <!-- ═══ HERO ═══ -->
+  <section class="hero">
+    <div class="hero-rings">
+      <div class="ring"></div>
+      <div class="ring"></div>
+      <div class="ring"></div>
+    </div>
 
-    <section class="section">
-      <h2>How Legends Review Works</h2>
-      <div class="phases">
-        <div class="phase">
-          <div class="num">1</div>
-          <h4>Independent Review</h4>
-          <p>Each legend reviews the code through their unique lens without seeing the others.</p>
+    <div class="hero-badge">
+      <span class="dot"></span>
+      Claude Code Skill
+    </div>
+
+    <h1>
+      <span class="line">Your code, reviewed by</span>
+      <span class="line"><span class="gradient">Legends</span></span>
+    </h1>
+
+    <p class="hero-sub">
+      Summon Elon Musk, Steve Jobs, and Linus Torvalds to review your code.
+      They argue until they agree.
+    </p>
+
+    <div class="hero-personas">
+      <div class="hero-persona">
+        <div class="persona-orb elon-orb">&#x1F525;</div>
+        <span class="persona-name elon">Elon</span>
+      </div>
+      <div class="hero-persona">
+        <div class="persona-orb jobs-orb">&#x1F34E;</div>
+        <span class="persona-name jobs">Steve</span>
+      </div>
+      <div class="hero-persona">
+        <div class="persona-orb linus-orb">&#x1F427;</div>
+        <span class="persona-name linus">Linus</span>
+      </div>
+    </div>
+
+    <div class="install-block">
+      <div class="install-cmd" id="installCmd" onclick="copyInstall()">
+        <span class="prompt">$ </span>curl -fsSL https://raw.githubusercontent.com/Atypical-Consulting/claude-legends-review/main/install.sh | bash
+      </div>
+      <button class="install-copy" id="copyBtn" onclick="copyInstall()">copy</button>
+    </div>
+  </section>
+
+  <!-- ═══ REVIEWERS ═══ -->
+  <section class="reviewers">
+    <div class="wrap">
+      <div class="section-label reveal">The Pantheon</div>
+      <h2 class="section-title reveal">Three minds. Three lenses. Zero mercy.</h2>
+
+      <div class="reviewer-cards">
+        <div class="r-card elon reveal" data-glyph="&#x1F525;">
+          <div class="r-card-icon">&#x1F525;</div>
+          <h3>Elon Review</h3>
+          <div class="r-cmd">/elon-review</div>
+          <div class="areas">
+            <span>First Principles</span>
+            <span>Speed</span>
+            <span>Deletion</span>
+            <span>Business Value</span>
+          </div>
+          <p>Should this exist? Could it be 10x simpler? What would the delete-first version look like? Are we gold-plating?</p>
+          <blockquote>"Ship this, but the real issue is that you're not testing your PDFs."</blockquote>
         </div>
-        <div class="phase">
-          <div class="num">2</div>
-          <h4>Debate</h4>
-          <p>They read each other's reviews and argue in character. Challenges, defenses, concessions.</p>
+
+        <div class="r-card jobs reveal" data-glyph="&#x1F34E;">
+          <div class="r-card-icon">&#x1F34E;</div>
+          <h3>Jobs Review</h3>
+          <div class="r-cmd">/jobs-review</div>
+          <div class="areas">
+            <span>Design</span>
+            <span>DX</span>
+            <span>Taste</span>
+            <span>Product Vision</span>
+          </div>
+          <p>How does this feel to use? Does the API sing? Would you be proud to demo this to a partner on day one?</p>
+          <blockquote>"The API does what it's supposed to. It just doesn't sing."</blockquote>
         </div>
-        <div class="phase">
-          <div class="num">3</div>
+
+        <div class="r-card linus reveal" data-glyph="&#x1F427;">
+          <div class="r-card-icon">&#x1F427;</div>
+          <h3>Linus Review</h3>
+          <div class="r-cmd">/linus-review</div>
+          <div class="areas">
+            <span>Correctness</span>
+            <span>Abstractions</span>
+            <span>Performance</span>
+            <span>Errors</span>
+          </div>
+          <p>Is this actually correct? Does that abstraction earn its existence? What happens when this fails at 3 AM?</p>
+          <blockquote>"You've built an abstraction layer that adds complexity without removing any. Delete it."</blockquote>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ TERMINAL DEMO ═══ -->
+  <section class="demo">
+    <div class="wrap">
+      <div class="section-label reveal">See It In Action</div>
+      <h2 class="section-title reveal">One command. Three verdicts.</h2>
+
+      <div class="terminal reveal" id="terminal">
+        <div class="terminal-bar">
+          <div class="terminal-dot"></div>
+          <div class="terminal-dot"></div>
+          <div class="terminal-dot"></div>
+          <div class="terminal-title">claude-code &mdash; legends-review</div>
+        </div>
+        <div class="terminal-body" id="terminalBody">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ HOW IT WORKS ═══ -->
+  <section class="flow">
+    <div class="wrap">
+      <div class="section-label reveal">The Process</div>
+      <h2 class="section-title reveal">Debate-driven consensus</h2>
+
+      <div class="flow-steps">
+        <div class="flow-step reveal">
+          <div class="flow-num">1</div>
+          <h4>Solo Review</h4>
+          <p>Each legend reviews independently through their unique lens. No groupthink. No bias.</p>
+        </div>
+        <div class="flow-step reveal">
+          <div class="flow-num">2</div>
+          <h4>The Debate</h4>
+          <p>They read each other's reviews and argue in character. Challenges fly. Positions shift.</p>
+        </div>
+        <div class="flow-step reveal">
+          <div class="flow-num">3</div>
           <h4>Consensus</h4>
-          <p>Final ratings, unified actions, and three hard truths that survived the debate.</p>
+          <p>Unified rating, top actions, and three hard truths that survived the fire.</p>
         </div>
       </div>
+    </div>
+  </section>
 
-      <div class="sample">
-        <h4>&#x1F3DB;&#xFE0F; Sample Consensus Report</h4>
-        <table>
-          <tr><th>Reviewer</th><th>Rating</th><th>Verdict</th></tr>
-          <tr><td>&#x1F525; Elon</td><td>7/10</td><td>"Ship it, but delete the middleware layer &mdash; it solves yesterday's problem."</td></tr>
-          <tr><td>&#x1F34E; Steve</td><td>6/10</td><td>"The API works. It just doesn't sing."</td></tr>
-          <tr><td>&#x1F427; Linus</td><td>8/10</td><td>"The error handling is correct. That's rarer than you think."</td></tr>
+  <!-- ═══ CONSENSUS PREVIEW ═══ -->
+  <section class="consensus">
+    <div class="wrap">
+      <div class="consensus-box reveal">
+        <div class="consensus-header">
+          <h3>&#x1F3DB;&#xFE0F; Consensus Report</h3>
+          <div class="consensus-rating">7/10</div>
+        </div>
+        <table class="consensus-table">
+          <tr>
+            <td><span class="t-elon" style="color:var(--elon)">&#x1F525; Elon</span></td>
+            <td class="verdict">"Ship it, but delete the middleware layer &mdash; it solves yesterday's problem."</td>
+            <td class="rating" style="color:var(--elon)">7/10</td>
+          </tr>
+          <tr>
+            <td><span class="t-jobs" style="color:var(--jobs)">&#x1F34E; Steve</span></td>
+            <td class="verdict">"Someone cared about this. Now care about the error messages too."</td>
+            <td class="rating" style="color:var(--jobs)">6/10</td>
+          </tr>
+          <tr>
+            <td><span class="t-linus" style="color:var(--linus)">&#x1F427; Linus</span></td>
+            <td class="verdict">"The error handling is correct. That's rarer than you think."</td>
+            <td class="rating" style="color:var(--linus)">8/10</td>
+          </tr>
         </table>
-        <p><strong>Consensus Rating:</strong> 7/10</p>
+        <div class="consensus-footer">
+          <span class="consensus-tag">&#x2705; Delete middleware abstraction</span>
+          <span class="consensus-tag">&#x2705; Rewrite error messages</span>
+          <span class="consensus-tag">&#x2705; Add integration tests</span>
+        </div>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <section class="quote">
-      <blockquote>"Three brilliant people arguing in a room &mdash; not polite agreement."</blockquote>
-    </section>
+  <!-- ═══ CTA ═══ -->
+  <section class="cta">
+    <div class="wrap">
+      <h2 class="reveal">Ready to face the tribunal?</h2>
+      <p class="reveal">Install in 10 seconds. No cloning required.</p>
+      <div class="cta-buttons reveal">
+        <a href="https://github.com/Atypical-Consulting/claude-legends-review" class="btn btn-primary">
+          <svg viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+          Star on GitHub
+        </a>
+        <a href="#installCmd" class="btn btn-ghost">
+          Install now
+        </a>
+      </div>
+    </div>
+  </section>
 
-    <footer>
-      <a href="https://github.com/Atypical-Consulting/claude-legends-review">GitHub</a> &middot;
-      MIT License &middot;
-      Built for <a href="https://docs.anthropic.com/en/docs/claude-code">Claude Code</a>
-    </footer>
-  </div>
+  <!-- ═══ FOOTER ═══ -->
+  <footer>
+    <div class="footer-links">
+      <a href="https://github.com/Atypical-Consulting/claude-legends-review">GitHub</a>
+      <a href="https://github.com/Atypical-Consulting/claude-legends-review/blob/main/LICENSE">MIT License</a>
+      <a href="https://docs.anthropic.com/en/docs/claude-code">Claude Code</a>
+      <a href="https://github.com/Atypical-Consulting">Atypical Consulting</a>
+    </div>
+    <p>Built with obsession by humans and Claude.</p>
+  </footer>
+
+  <script>
+    /* ── Copy install command ── */
+    function copyInstall() {
+      const cmd = 'curl -fsSL https://raw.githubusercontent.com/Atypical-Consulting/claude-legends-review/main/install.sh | bash';
+      navigator.clipboard.writeText(cmd);
+      const btn = document.getElementById('copyBtn');
+      btn.textContent = 'copied!';
+      btn.style.color = 'var(--linus)';
+      btn.style.borderColor = 'var(--linus)';
+      setTimeout(() => {
+        btn.textContent = 'copy';
+        btn.style.color = '';
+        btn.style.borderColor = '';
+      }, 2000);
+    }
+
+    /* ── Scroll reveal ── */
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => entry.target.classList.add('visible'), i * 80);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    /* ── Terminal typing animation ── */
+    const terminalLines = [
+      { text: '$ /legends-review', cls: 't-cmd', delay: 60 },
+      { text: '', cls: '', delay: 300 },
+      { text: 'Spawning reviewers...', cls: 't-dim', delay: 40 },
+      { text: '', cls: '', delay: 400 },
+      { text: '🔥 ELON REVIEW', cls: 't-elon', delay: 30 },
+      { text: '   Rating: 7/10', cls: 't-elon', delay: 30 },
+      { text: '   "Delete the abstraction layer. Ship without it.', cls: 't-dim', delay: 25 },
+      { text: '    If someone screams, add it back."', cls: 't-dim', delay: 25 },
+      { text: '', cls: '', delay: 300 },
+      { text: '🍎 JOBS REVIEW', cls: 't-jobs', delay: 30 },
+      { text: '   Rating: 6/10', cls: 't-jobs', delay: 30 },
+      { text: '   "The API works. It just doesn\'t sing.', cls: 't-dim', delay: 25 },
+      { text: '    A developer should smile using this, not wince."', cls: 't-dim', delay: 25 },
+      { text: '', cls: '', delay: 300 },
+      { text: '🐧 LINUS REVIEW', cls: 't-linus', delay: 30 },
+      { text: '   Rating: 8/10', cls: 't-linus', delay: 30 },
+      { text: '   "The error handling is correct. I can tell because', cls: 't-dim', delay: 25 },
+      { text: '    the failure mode is explicit and recoverable."', cls: 't-dim', delay: 25 },
+      { text: '', cls: '', delay: 400 },
+      { text: '⚡ Debate phase: 3 rounds of cross-review...', cls: 't-dim', delay: 30 },
+      { text: '', cls: '', delay: 500 },
+      { text: '🏛️ CONSENSUS: 7/10', cls: 't-gold', delay: 30 },
+      { text: '   Top action: Delete middleware, rewrite error msgs', cls: 't-dim', delay: 25 },
+    ];
+
+    let termStarted = false;
+    const termObs = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting && !termStarted) {
+        termStarted = true;
+        typeTerminal();
+        termObs.unobserve(entries[0].target);
+      }
+    }, { threshold: 0.3 });
+
+    const termEl = document.getElementById('terminal');
+    if (termEl) termObs.observe(termEl);
+
+    async function typeTerminal() {
+      const body = document.getElementById('terminalBody');
+      body.innerHTML = '';
+
+      for (const line of terminalLines) {
+        const div = document.createElement('div');
+        div.className = 't-line';
+        body.appendChild(div);
+
+        if (line.text === '') {
+          div.innerHTML = '&nbsp;';
+          await sleep(line.delay);
+          continue;
+        }
+
+        for (let i = 0; i < line.text.length; i++) {
+          div.innerHTML = `<span class="${line.cls}">${escHtml(line.text.slice(0, i + 1))}</span><span class="cursor"></span>`;
+          await sleep(line.delay);
+        }
+        div.innerHTML = `<span class="${line.cls}">${escHtml(line.text)}</span>`;
+        await sleep(80);
+
+        body.scrollTop = body.scrollHeight;
+      }
+
+      const cursor = document.createElement('div');
+      cursor.className = 't-line';
+      cursor.innerHTML = '<span class="cursor"></span>';
+      body.appendChild(cursor);
+    }
+
+    function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+    function escHtml(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  </script>
+
 </body>
 </html>
