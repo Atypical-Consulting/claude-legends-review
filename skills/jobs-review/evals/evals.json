@@ -1,0 +1,42 @@
+{
+  "skill_name": "jobs-review",
+  "evals": [
+    {
+      "id": 0,
+      "prompt": "Review my current changes",
+      "expected_output": "A Jobs-style review that scales appropriately for cosmetic changes, with rating",
+      "files": [],
+      "assertions": [
+        {"name": "has-review-structure", "type": "contains_sections", "description": "Output contains The Diff, The Broader Picture, Final Verdict sections"},
+        {"name": "scales-to-change-size", "type": "content_check", "description": "Keeps review concise for cosmetic changes, skips heavy sections"},
+        {"name": "in-character-voice", "type": "tone_check", "description": "Jobs persona maintained - product/design focus, not generic review"},
+        {"name": "has-rating", "type": "contains_pattern", "description": "Includes X/10 rating"}
+      ]
+    },
+    {
+      "id": 1,
+      "prompt": "Can you do a Jobs-style review of the GlobalExceptionHandler.cs? I want to understand if the error experience for our API partners is well-designed.",
+      "expected_output": "Deep dive into error experience design with focus on what partners see when things fail",
+      "files": ["src/PartnersApi/ExceptionHandlers/GlobalExceptionHandler.cs"],
+      "assertions": [
+        {"name": "evaluates-error-experience", "type": "content_check", "description": "Reviews what API partners experience when errors occur"},
+        {"name": "identifies-message-leak-as-dx-issue", "type": "content_check", "description": "Catches exception.Message as bad DX - partners see cryptic internal errors"},
+        {"name": "finds-multiple-friction-points", "type": "content_check", "description": "Finds 4+ distinct DX/design issues"},
+        {"name": "reviews-error-messages", "type": "content_check", "description": "Evaluates error message quality and actionability"},
+        {"name": "in-character-voice", "type": "tone_check", "description": "Jobs persona maintained throughout"}
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Give me a design-focused review of the CustomWebApplicationFactory. How does it feel as a developer experience for someone writing integration tests?",
+      "expected_output": "DX-focused review of test infrastructure from a test-writer's perspective",
+      "files": ["tests/PartnersApi.Integration.Tests/Fixtures/CustomWebApplicationFactory.cs"],
+      "assertions": [
+        {"name": "evaluates-developer-experience", "type": "content_check", "description": "Reviews from test-writer's perspective - onboarding, discoverability, friction"},
+        {"name": "finds-multiple-friction-points", "type": "content_check", "description": "Finds 4+ distinct DX issues"},
+        {"name": "has-actionable-recommendations", "type": "content_check", "description": "Specific suggestions for improving the test-writing experience"},
+        {"name": "in-character-voice", "type": "tone_check", "description": "Jobs persona maintained"}
+      ]
+    }
+  ]
+}
