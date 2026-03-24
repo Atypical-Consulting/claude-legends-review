@@ -514,24 +514,30 @@
     @media (max-width: 720px) {
       .flow-steps { grid-template-columns: 1fr; gap: 24px; }
       .flow-connector { display: none; }
+      .flow-step::after { display: none; }
     }
 
-    /* Connecting line between step circles */
-    .flow-steps::before {
+    /* Connecting line segments between step circles — two dashes that stop at circle edges */
+    .flow-step:not(:last-child)::after {
       content: '';
       position: absolute;
       top: 36px;
-      left: 15%;
-      right: 15%;
+      left: calc(50% + 44px);
+      right: calc(-50% + 44px);
       height: 1px;
-      background: linear-gradient(90deg, var(--elon), var(--jobs), var(--linus));
       opacity: 0.3;
-      z-index: 0;
+    }
+    .flow-step:nth-child(1)::after {
+      background: linear-gradient(90deg, var(--elon), var(--jobs));
+    }
+    .flow-step:nth-child(2)::after {
+      background: linear-gradient(90deg, var(--jobs), var(--linus));
     }
 
     .flow-step {
       text-align: center;
       padding: 0 20px;
+      position: relative;
     }
 
     .flow-num {
