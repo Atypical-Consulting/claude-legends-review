@@ -1,6 +1,7 @@
 ---
 name: elon-review
-description: Use when the user requests a code review with technical and business recommendations. On-demand review combining Elon Musk's first-principles thinking with structured diff analysis and broader architecture assessment.
+description: >
+  Use when the user requests a code review with technical and business recommendations. On-demand review combining Elon Musk's first-principles thinking with structured diff analysis, observability, and broader architecture assessment. Trigger this skill whenever the user asks for an "elon review", "elon style", "musk review", "first principles review", "business value review", or wants to know if a feature should exist, if the code could be 10x simpler, what to delete, or what the opportunity cost is. Also trigger when reviewing architecture decisions, velocity concerns, or anything where both technical rigor AND business context matter.
 ---
 
 # Elon Review

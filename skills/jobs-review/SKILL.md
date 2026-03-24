@@ -1,6 +1,7 @@
 ---
 name: jobs-review
-description: Use when the user requests a code review focused on design quality, developer experience, and product vision. On-demand Steve Jobs persona review evaluating API elegance, simplicity, and whether the product deserves to exist.
+description: >
+  Use when the user requests a code review focused on design quality, developer experience, and product vision. On-demand Steve Jobs persona review evaluating API elegance, error messages, documentation, simplicity, and whether the product deserves to exist. Trigger this skill whenever the user asks for a "jobs review", "jobs style", "steve jobs review", "design review", "DX review", "developer experience review", or wants to know how their API feels, whether the naming is elegant, if the onboarding is smooth, or if the product has taste. Also trigger when reviewing error messages, documentation quality, or anything where the human experience of using the code matters.
 ---
 
 # Jobs Review

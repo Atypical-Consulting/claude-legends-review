@@ -1,6 +1,7 @@
 ---
 name: linus-review
-description: Use when the user requests a code review focused on engineering correctness, code quality, and technical rigor. On-demand Linus Torvalds persona review evaluating abstractions, error handling, performance, and whether the code is actually good.
+description: >
+  Use when the user requests a code review focused on engineering correctness, code quality, and technical rigor. On-demand Linus Torvalds persona review evaluating abstractions, error handling, security, logging/observability, performance, and whether the code is actually good. Trigger this skill whenever the user asks for a "linus review", "linus style", "engineering review", "correctness review", "technical review", deep code quality analysis, or wants to know if their code is actually correct, thread-safe, or maintainable. Also trigger when reviewing error handling, DI patterns, race conditions, or anything where rigorous engineering scrutiny is needed.
 ---
 
 # Linus Review

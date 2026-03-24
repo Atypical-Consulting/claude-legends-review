@@ -1,6 +1,7 @@
 ---
 name: legends-review
-description: Use when the user wants a comprehensive code review from multiple perspectives, or invokes a team-based review combining business, design, and engineering viewpoints with debate and consensus.
+description: >
+  Use when the user wants a comprehensive code review from multiple perspectives, or invokes a team-based review combining business, design, and engineering viewpoints with debate and consensus. Trigger this skill whenever the user asks for a "legends review", "team review", "full review", "review from all angles", or wants business + design + engineering perspectives debated together. Also trigger when the user wants Elon, Jobs, AND Linus to review the same code, or asks for a multi-perspective review with debate and consensus. This is the flagship skill — use it when no single persona is enough.
 ---
 
 # Legends Review
