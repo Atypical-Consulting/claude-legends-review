@@ -805,9 +805,10 @@
             <span>First Principles</span>
             <span>Speed</span>
             <span>Deletion</span>
+            <span>Observability</span>
             <span>Business Value</span>
           </div>
-          <p>Should this exist? Could it be 10x simpler? What would the delete-first version look like? Are we gold-plating?</p>
+          <p>Should this exist? Could it be 10x simpler? Finds all problems — numbered, with severity. Scales depth to change significance.</p>
           <blockquote>"Ship this, but the real issue is that you're not testing your PDFs."</blockquote>
         </div>
 
@@ -818,10 +819,11 @@
           <div class="areas">
             <span>Design</span>
             <span>DX</span>
+            <span>Error Messages</span>
+            <span>Docs</span>
             <span>Taste</span>
-            <span>Product Vision</span>
           </div>
-          <p>How does this feel to use? Does the API sing? Would you be proud to demo this to a partner on day one?</p>
+          <p>How does this feel? Does the API sing? Finds all friction points — numbered, with impact. Reviews error states and documentation gaps.</p>
           <blockquote>"The API does what it's supposed to. It just doesn't sing."</blockquote>
         </div>
 
@@ -831,11 +833,12 @@
           <div class="r-cmd">/linus-review</div>
           <div class="areas">
             <span>Correctness</span>
+            <span>Security</span>
+            <span>Logging</span>
             <span>Abstractions</span>
             <span>Performance</span>
-            <span>Errors</span>
           </div>
-          <p>Is this actually correct? Does that abstraction earn its existence? What happens when this fails at 3 AM?</p>
+          <p>Is this actually correct? Finds all bugs — numbered, with severity. Reviews security, logging, and observability as seriously as correctness.</p>
           <blockquote>"You've built an abstraction layer that adds complexity without removing any. Delete it."</blockquote>
         </div>
       </div>
@@ -893,7 +896,7 @@
       <div class="consensus-box reveal">
         <div class="consensus-header">
           <h3>&#x1F3DB;&#xFE0F; Consensus Report</h3>
-          <div class="consensus-rating">7/10</div>
+          <div class="consensus-rating">6/10</div>
         </div>
         <table class="consensus-table">
           <tr>
@@ -903,19 +906,19 @@
           </tr>
           <tr>
             <td><span class="t-jobs" style="color:var(--jobs)">&#x1F34E; Steve</span></td>
-            <td class="verdict">"Someone cared about this. Now care about the error messages too."</td>
+            <td class="verdict">"Three error formats for one API is not design &mdash; it's an accident."</td>
             <td class="rating" style="color:var(--jobs)">6/10</td>
           </tr>
           <tr>
             <td><span class="t-linus" style="color:var(--linus)">&#x1F427; Linus</span></td>
-            <td class="verdict">"The error handling is correct. That's rarer than you think."</td>
-            <td class="rating" style="color:var(--linus)">8/10</td>
+            <td class="verdict">"exception.Message leaks internals &mdash; fix the info disclosure before anything else."</td>
+            <td class="rating" style="color:var(--linus)">6/10</td>
           </tr>
         </table>
         <div class="consensus-footer">
-          <span class="consensus-tag">&#x2705; Delete middleware abstraction</span>
-          <span class="consensus-tag">&#x2705; Rewrite error messages</span>
-          <span class="consensus-tag">&#x2705; Add integration tests</span>
+          <span class="consensus-tag">&#x2705; Fix information disclosure</span>
+          <span class="consensus-tag">&#x2705; Unify error response format</span>
+          <span class="consensus-tag">&#x2705; Add HasStarted guard</span>
         </div>
       </div>
     </div>
@@ -983,25 +986,25 @@
       { text: '', cls: '', delay: 300 },
       { text: 'Spawning reviewers...', cls: 't-dim', delay: 40 },
       { text: '', cls: '', delay: 400 },
-      { text: '🔥 ELON REVIEW', cls: 't-elon', delay: 30 },
+      { text: '🔥 ELON REVIEW — 4 problems found', cls: 't-elon', delay: 30 },
       { text: '   Rating: 7/10', cls: 't-elon', delay: 30 },
       { text: '   "Delete the abstraction layer. Ship without it.', cls: 't-dim', delay: 25 },
       { text: '    If someone screams, add it back."', cls: 't-dim', delay: 25 },
       { text: '', cls: '', delay: 300 },
-      { text: '🍎 JOBS REVIEW', cls: 't-jobs', delay: 30 },
+      { text: '🍎 JOBS REVIEW — 5 friction points found', cls: 't-jobs', delay: 30 },
       { text: '   Rating: 6/10', cls: 't-jobs', delay: 30 },
       { text: '   "The API works. It just doesn\'t sing.', cls: 't-dim', delay: 25 },
-      { text: '    A developer should smile using this, not wince."', cls: 't-dim', delay: 25 },
+      { text: '    Three error formats for one API is not design."', cls: 't-dim', delay: 25 },
       { text: '', cls: '', delay: 300 },
-      { text: '🐧 LINUS REVIEW', cls: 't-linus', delay: 30 },
-      { text: '   Rating: 8/10', cls: 't-linus', delay: 30 },
-      { text: '   "The error handling is correct. I can tell because', cls: 't-dim', delay: 25 },
-      { text: '    the failure mode is explicit and recoverable."', cls: 't-dim', delay: 25 },
+      { text: '🐧 LINUS REVIEW — 6 bugs found', cls: 't-linus', delay: 30 },
+      { text: '   Rating: 6/10', cls: 't-linus', delay: 30 },
+      { text: '   "exception.Message leaks internals to clients —', cls: 't-dim', delay: 25 },
+      { text: '    that\'s how server names end up in Shodan."', cls: 't-dim', delay: 25 },
       { text: '', cls: '', delay: 400 },
       { text: '⚡ Debate phase: 3 rounds of cross-review...', cls: 't-dim', delay: 30 },
       { text: '', cls: '', delay: 500 },
-      { text: '🏛️ CONSENSUS: 7/10', cls: 't-gold', delay: 30 },
-      { text: '   Top action: Delete middleware, rewrite error msgs', cls: 't-dim', delay: 25 },
+      { text: '🏛️ CONSENSUS: 6/10', cls: 't-gold', delay: 30 },
+      { text: '   Top action: Fix info disclosure, unify error format', cls: 't-dim', delay: 25 },
     ];
 
     let termStarted = false;
