@@ -1,0 +1,43 @@
+{
+  "skill_name": "elon-review",
+  "evals": [
+    {
+      "id": 0,
+      "prompt": "Review my current changes",
+      "expected_output": "An Elon-style review that scales for cosmetic changes, with first-principles check and rating",
+      "files": [],
+      "assertions": [
+        {"name": "has-review-structure", "type": "contains_sections", "description": "Elon template sections present (Diff, Broader Picture, Verdict)"},
+        {"name": "scales-to-change-size", "type": "content_check", "description": "Keeps review concise for cosmetic changes, skips heavy sections"},
+        {"name": "in-character-voice", "type": "tone_check", "description": "Elon persona - first-principles, speed, deletion focus"},
+        {"name": "has-rating", "type": "contains_pattern", "description": "Includes X/10 rating"}
+      ]
+    },
+    {
+      "id": 1,
+      "prompt": "Can you do an Elon-style review of the GlobalExceptionHandler.cs? I want to know if this is the right approach or if we're over/under-engineering the error handling.",
+      "expected_output": "First-principles review of error handling approach with business value assessment",
+      "files": ["src/PartnersApi/ExceptionHandlers/GlobalExceptionHandler.cs"],
+      "assertions": [
+        {"name": "applies-first-principles", "type": "content_check", "description": "Questions why things exist, pushes for simplification"},
+        {"name": "finds-multiple-problems", "type": "content_check", "description": "Finds 4+ distinct issues"},
+        {"name": "checks-observability", "type": "content_check", "description": "Reviews logging, debugging capability, production visibility"},
+        {"name": "includes-business-angle", "type": "content_check", "description": "Connects technical issues to business impact"},
+        {"name": "in-character-voice", "type": "tone_check", "description": "Elon persona maintained"}
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Give me an Elon-style review of the CustomWebApplicationFactory. Is this test infrastructure worth the complexity?",
+      "expected_output": "First-principles assessment of test infrastructure ROI and complexity",
+      "files": ["tests/PartnersApi.Integration.Tests/Fixtures/CustomWebApplicationFactory.cs"],
+      "assertions": [
+        {"name": "questions-existence", "type": "content_check", "description": "Applies first-principles to question whether complexity is justified"},
+        {"name": "finds-multiple-problems", "type": "content_check", "description": "Finds 4+ distinct issues"},
+        {"name": "evaluates-velocity-impact", "type": "content_check", "description": "Assesses how this affects team speed"},
+        {"name": "has-actionable-recommendations", "type": "content_check", "description": "Specific suggestions"},
+        {"name": "in-character-voice", "type": "tone_check", "description": "Elon persona maintained"}
+      ]
+    }
+  ]
+}
