@@ -1,0 +1,44 @@
+{
+  "skill_name": "linus-review",
+  "evals": [
+    {
+      "id": 0,
+      "prompt": "Review my current changes",
+      "expected_output": "A structured Linus-style review covering the diff (namespace reorder, var-to-explicit-type changes), broader architecture assessment, and a final verdict with rating",
+      "files": [],
+      "assertions": [
+        {"name": "has-review-structure", "type": "contains_sections", "description": "Output contains The Diff, The Broader Picture, Final Verdict sections"},
+        {"name": "mentions-both-files", "type": "content_check", "description": "References both GlobalExceptionHandler.cs and CustomWebApplicationFactory.cs"},
+        {"name": "identifies-change-nature", "type": "content_check", "description": "Identifies changes as style/cleanup"},
+        {"name": "in-character-voice", "type": "tone_check", "description": "Sharp, technical Linus-style tone throughout"},
+        {"name": "has-rating", "type": "contains_pattern", "description": "Includes X/10 rating"}
+      ]
+    },
+    {
+      "id": 1,
+      "prompt": "Can you do a Linus-style review of the GlobalExceptionHandler.cs? I want to know if the error handling approach is solid.",
+      "expected_output": "Deep dive into the exception handler with focus on error handling correctness, potential information leakage via exception.Message, and specific code suggestions",
+      "files": ["src/PartnersApi/ExceptionHandlers/GlobalExceptionHandler.cs"],
+      "assertions": [
+        {"name": "reads-full-file", "type": "content_check", "description": "Evidence of reading full file and related code"},
+        {"name": "evaluates-error-handling", "type": "content_check", "description": "Assesses ProblemDetails approach and status code mapping"},
+        {"name": "identifies-exception-detail-leak", "type": "content_check", "description": "Catches exception.Message leak risk in Detail field"},
+        {"name": "has-code-suggestions", "type": "content_check", "description": "Includes specific code changes"},
+        {"name": "in-character-voice", "type": "tone_check", "description": "Linus persona maintained throughout"}
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Give me a technical code review of the CustomWebApplicationFactory test fixture. I'm worried about the DI replacement pattern — is it fragile?",
+      "expected_output": "Architecture review of DI replacement pattern, identifying fragility risks, maintainability concerns, and concrete alternatives",
+      "files": ["tests/PartnersApi.Integration.Tests/Fixtures/CustomWebApplicationFactory.cs"],
+      "assertions": [
+        {"name": "addresses-fragility-concern", "type": "content_check", "description": "Directly responds to DI fragility concern"},
+        {"name": "identifies-removal-pattern-risk", "type": "content_check", "description": "Notes FirstOrDefault+Remove pattern fragility"},
+        {"name": "discusses-maintainability", "type": "content_check", "description": "Addresses scalability as project grows"},
+        {"name": "has-actionable-recommendations", "type": "content_check", "description": "Specific implementable suggestions"},
+        {"name": "in-character-voice", "type": "tone_check", "description": "Linus persona maintained"}
+      ]
+    }
+  ]
+}
