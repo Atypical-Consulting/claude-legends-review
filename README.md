@@ -11,7 +11,7 @@
   They argue until they agree.<br><br>
   <a href="https://github.com/Atypical-Consulting/claude-legends-review/stargazers"><img src="https://img.shields.io/github/stars/Atypical-Consulting/claude-legends-review?style=flat&color=fbbf24&labelColor=0d1117" alt="Stars"></a>
   <a href="https://github.com/Atypical-Consulting/claude-legends-review/blob/main/LICENSE"><img src="https://img.shields.io/github/license/Atypical-Consulting/claude-legends-review?style=flat&color=2dd4a8&labelColor=0d1117" alt="License"></a>
-  <a href="https://atypical-consulting.github.io/claude-legends-review/"><img src="https://img.shields.io/badge/docs-website-b48cff?style=flat&labelColor=0d1117" alt="Website"></a>
+  <a href="https://atypical-consulting.github.io/claude-legends-review/"><img src="https://img.shields.io/badge/🌐_website-live_demo-b48cff?style=flat&labelColor=0d1117" alt="Website"></a>
 </p>
 
 <br>
@@ -19,6 +19,8 @@
 > **One command. Three legendary perspectives. Zero mercy.**
 >
 > Powered by [Claude Code](https://docs.anthropic.com/en/docs/claude-code) Skills.
+>
+> **[See it in action →](https://atypical-consulting.github.io/claude-legends-review/)**
 
 <br>
 
