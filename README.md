@@ -136,6 +136,17 @@ git clone https://github.com/Atypical-Consulting/claude-legends-review.git
 cp -r claude-legends-review/skills/* ~/.claude/skills/
 ```
 
+## Why Legends Review?
+
+Most AI code review tools give you one perspective. Legends Review gives you three — and makes them argue.
+
+- **Deeper than a linter**: Finds security issues, observability gaps, DX problems, and architectural debt that static analysis misses
+- **Scales to context**: Cosmetic changes get a quick pass; new features get the full tribunal
+- **Exhaustive**: Each reviewer finds ALL issues (numbered, with severity), not just the first one
+- **Battle-tested**: Each skill evaluated with automated benchmarks — 100% pass rate vs 60-73% baseline
+
+Built for developers who use [Claude Code](https://docs.anthropic.com/en/docs/claude-code) and want more than "LGTM" on their pull requests.
+
 ## Requirements
 
 - [Claude Code](https://docs.anthropic.com/en/docs/claude-code) CLI
