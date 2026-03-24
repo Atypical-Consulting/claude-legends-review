@@ -40,7 +40,8 @@ First-principles thinking. Business value. Speed. Deletion.
 
 > *"Delete the abstraction layer. Ship without it. If someone screams, add it back."*
 
-Reviews through: complexity, performance, security, maintainability, test coverage.
+Reviews through: complexity, performance, security, observability, maintainability, test coverage.
+Finds all problems (numbered, with severity). Scales depth to change significance.
 Asks: Should this exist? Could it be 10x simpler? What's the opportunity cost?
 
 ---
@@ -51,7 +52,8 @@ Design obsession. Developer experience. Product vision. Taste.
 
 > *"The API does what it's supposed to. It just doesn't sing."*
 
-Reviews through: API elegance, naming, DX, defaults, the last 10%.
+Reviews through: API elegance, naming, DX, error messages, documentation, defaults, the last 10%.
+Finds all friction points (numbered, with impact). Scales depth to change significance.
 Asks: How does this feel? Would you be proud to demo this? Say no.
 
 ---
@@ -62,7 +64,8 @@ Engineering rigor. Correctness. Abstractions. Maintainability.
 
 > *"You've built an abstraction layer that adds complexity without removing any. Delete it."*
 
-Reviews through: correctness, abstractions, error handling, performance, readability, naming.
+Reviews through: correctness, abstractions, error handling, security, logging/observability, performance, readability, naming.
+Finds all bugs (numbered, with severity). Scales depth to change significance.
 Asks: Is this actually correct? What breaks at 3 AM? Show me the code.
 
 ---
