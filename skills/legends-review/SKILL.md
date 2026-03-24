@@ -99,7 +99,11 @@ Phase 1 — Independent Review: Each teammate writes their complete review
 independently using their persona's format. Do NOT read other reviews first.
 
 Phase 2 — Cross-Review & Debate: After all three reviews are posted,
-each teammate reads the other two reviews and responds IN CHARACTER:
+each teammate reads the other two reviews and responds IN CHARACTER.
+IMPORTANT: When sending messages to other teammates, ALWAYS include a
+"summary" field (5-10 word preview) — SendMessage requires it for
+plain text messages. Example: summary: "Elon challenges Linus on perf rating"
+Each response should:
 - Challenge findings they disagree with (with specific technical reasons)
 - Defend their own positions when challenged
 - Acknowledge good points from others that they missed
