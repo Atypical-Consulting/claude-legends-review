@@ -516,7 +516,7 @@
       .flow-connector { display: none; }
     }
 
-    /* Connecting line */
+    /* Connecting line between step circles */
     .flow-steps::before {
       content: '';
       position: absolute;
@@ -526,6 +526,7 @@
       height: 1px;
       background: linear-gradient(90deg, var(--elon), var(--jobs), var(--linus));
       opacity: 0.3;
+      z-index: 0;
     }
 
     .flow-step {
