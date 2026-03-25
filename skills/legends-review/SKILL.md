@@ -109,9 +109,11 @@ independently using their persona's format. Do NOT read other reviews first.
 
 Phase 2 — Cross-Review & Debate: After all three reviews are posted,
 each teammate reads the other two reviews and responds IN CHARACTER.
-IMPORTANT: When sending messages to other teammates, ALWAYS include a
-"summary" field (5-10 word preview) — SendMessage requires it for
-plain text messages. Example: summary: "Elon challenges Linus on perf rating"
+
+⚠️ CRITICAL: Every SendMessage call MUST include a "summary" field
+(5-10 word preview string) or it WILL fail. This is a hard API requirement.
+Format: SendMessage(to: "name", message: "...", summary: "5-10 word preview")
+
 Each response should:
 - Challenge findings they disagree with (with specific technical reasons)
 - Defend their own positions when challenged
@@ -131,8 +133,18 @@ not polite agreement. They should challenge each other hard but fairly.
 
 As the lead:
 - Let all three complete Phase 1 independently before starting Phase 2
+- To kick off Phase 2, send each teammate a message asking them to read and debate the others' reviews
 - If debate stalls, prompt specific disagreements: "Elon rated performance 🟢 but Linus rated it 🟡 — resolve this"
 - After Phase 3, write the final synthesis
+
+**CRITICAL — SendMessage format:** Every `SendMessage` call with a plain text message
+MUST include a `summary` field (a 5-10 word preview). Without it, the call will fail
+with "summary is required when message is a string". This applies to YOU (the lead)
+and to all teammates. Example:
+
+```
+SendMessage(to: "Elon", message: "Phase 1 is complete. Read Steve's and Linus's reviews and respond in character.", summary: "Kick off Phase 2 cross-review debate")
+```
 
 ### Step 4: Write the Final Report
 
