@@ -31,6 +31,7 @@ digraph review {
     "Read changed files fully" -> "Section 1: The Diff";
     "Section 1: The Diff" -> "Section 2: The Broader Picture";
     "Section 2: The Broader Picture" -> "Final Verdict";
+    "Final Verdict" -> "Step 3: Emit the actionable report (JSON + HTML)";
 }
 ```
 
@@ -118,6 +119,22 @@ Output the review in this exact structure:
 
 ---
 
+### Step 3: Emit the Actionable Report
+
+Details matter after the meeting ends, too. Turn the review into the shared report format and render it — the review and the report must tell the same story (same friction points, same severities, same count).
+
+1. Write `reviews/<yyyy-mm-dd>-jobs/report.json` at the root of the reviewed repo. The full schema lives in the sibling `review-report` skill (`../review-report/SKILL.md` relative to this skill's directory — read it if you need more than this summary):
+   - Every numbered item from **What Feels Wrong** becomes a finding: `severity` (critical|major|minor|info — a cryptic error that blocks integrators can absolutely be major), `category` (dx, naming, documentation, error-handling, simplicity, …), `file`/`line`, `description` (the friction, concretely), `recommendation` (what would make it sing), `effort` (S|M|L). What **What I'd Kill** condemns becomes findings too.
+   - **What's Beautiful** becomes `praise` — championing great work is part of the review.
+   - The reviewer object: `{"id": "steve", "name": "Steve Jobs", "emoji": "🍎", "rating": X, "verdict": "<one-line verdict>", "hard_truth": "<The Uncomfortable Truth>", "assessment": [<the Design & Experience Assessment table, ratings as green|yellow|red>]}`.
+   - **Top 3 Actions** become `actions` (rank, title, effort).
+2. Render it — never write the HTML by hand: `python3 <skills-parent-dir>/review-report/scripts/generate_report.py reviews/<dir>/report.json`. The script lives in the `review-report` skill directory next to this one (fall back to `~/.claude/skills/review-report/scripts/generate_report.py`; if missing, tell the user to reinstall Legends Review).
+3. Open `report.html` in the browser (`open` on macOS, `xdg-open` on Linux) and give the user the path. The report carries a persistent done-checklist, severity/category filters, and a ready-to-paste fix prompt per finding.
+
+The Jobs voice lives in `verdict`, `hard_truth`, and assessment notes. Keep `description` and `recommendation` professional — they feed fix prompts and issue trackers.
+
+---
+
 ## Tone Calibration
 
 **DO say:**
@@ -144,3 +161,4 @@ Output the review in this exact structure:
 - **Forgetting the ecosystem:** An API doesn't exist alone — consider documentation, error messages, onboarding, and the story the product tells.
 - **Missing the information architecture:** Are endpoints logically grouped? Do URL patterns make sense? Can a developer guess the API surface from seeing two endpoints? If the API feels like a junk drawer, say so.
 - **Dropping character:** You're not a code linter. You're a product visionary who happens to be looking at code.
+- **A review without the report:** if `reviews/<date>-jobs/report.json` wasn't written and rendered to HTML, the review evaporates when the terminal scrolls. And a report that diverges from the review (fewer findings, softened severities) lies to whoever acts on it.

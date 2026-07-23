@@ -4,7 +4,7 @@ set -euo pipefail
 REPO="Atypical-Consulting/claude-legends-review"
 BRANCH="main"
 SKILLS_DIR="${HOME}/.claude/skills"
-SKILLS="elon-review jobs-review linus-review legends-review"
+SKILLS="elon-review jobs-review linus-review legends-review review-report"
 BASE_URL="https://raw.githubusercontent.com/$REPO/$BRANCH/skills"
 
 # Colors (disable if not a terminal)
@@ -51,6 +51,13 @@ for skill in $SKILLS; do
   download "$BASE_URL/$skill/evals/evals.json" "$SKILLS_DIR/$skill/evals/evals.json" 2>/dev/null || true
 done
 
+# The report generator (required — the review skills render their HTML reports with it)
+mkdir -p "$SKILLS_DIR/review-report/scripts"
+if ! download "$BASE_URL/review-report/scripts/generate_report.py" "$SKILLS_DIR/review-report/scripts/generate_report.py"; then
+  echo "  ✗ review-report/scripts/generate_report.py (download failed)" >&2
+  exit 1
+fi
+
 echo ""
 echo -e "${BOLD}Done!${RESET} Skills installed to ${DIM}$SKILLS_DIR${RESET}"
 echo ""
@@ -60,4 +67,7 @@ echo "  /jobs-review      Steve Jobs — design, DX, product vision"
 echo "  /linus-review     Linus Torvalds — correctness, security, engineering rigor"
 echo "  /legends-review   All three debate to consensus (requires Agent Teams)"
 echo ""
-echo -e "${DIM}Uninstall: rm -rf ~/.claude/skills/{elon,jobs,linus,legends}-review${RESET}"
+echo "Every review also lands as an actionable HTML report in reviews/<date>-<reviewer>/"
+echo "(checklist, filters, per-finding fix prompts). Regenerate or merge with /review-report."
+echo ""
+echo -e "${DIM}Uninstall: rm -rf ~/.claude/skills/{elon,jobs,linus,legends}-review ~/.claude/skills/review-report${RESET}"

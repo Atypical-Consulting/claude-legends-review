@@ -1,0 +1,52 @@
+{
+  "schema": "legends-review/1",
+  "date": "2026-01-01",
+  "repo": "FixtureApp",
+  "branch": "feature/fixture",
+  "commit": "abc1234",
+  "review_type": "solo",
+  "change_summary": "Fixture solo review — no real data.",
+  "scope": "Golden-test fixture: every value below is asserted by tests/review-report/test.sh.",
+  "reviewers": [
+    {
+      "id": "elon",
+      "name": "Elon Musk",
+      "emoji": "🔥",
+      "rating": 7,
+      "verdict": "Ship it, but delete the middleware layer.",
+      "hard_truth": "The architecture is fine. The velocity is not.",
+      "assessment": [
+        { "area": "Complexity", "rating": "yellow", "notes": "one layer too many" }
+      ]
+    }
+  ],
+  "findings": [
+    {
+      "id": 1,
+      "reviewer": "elon",
+      "severity": "critical",
+      "category": "security",
+      "title": "Exception details leak to the client",
+      "file": "src/Api/ErrorHandler.cs",
+      "line": 42,
+      "description": "Stack traces are returned in the 500 response body.",
+      "recommendation": "Return ProblemDetails without the stack trace; log the full exception at Error level.",
+      "fix_hint": "return Results.Problem(statusCode: 500);",
+      "effort": "S"
+    },
+    {
+      "id": 2,
+      "reviewer": "elon",
+      "severity": "minor",
+      "category": "simplicity",
+      "title": "Middleware layer adds no value",
+      "description": "The pass-through middleware wraps one call and swallows context.",
+      "recommendation": "Delete the middleware; call the service directly.",
+      "effort": "M"
+    }
+  ],
+  "actions": [
+    { "rank": 1, "title": "Fix the exception leak before merge", "champion": "elon", "effort": "S", "finding_ids": [1] }
+  ],
+  "praise": ["The test naming is genuinely clear."]
+}

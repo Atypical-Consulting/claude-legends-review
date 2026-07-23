@@ -93,6 +93,27 @@ Produces a final report with:
 
 <br>
 
+## The Actionable Report
+
+Every review — solo or legends — also lands on disk as `reviews/<date>-<reviewer>/`:
+
+- **`report.json`** — the findings as data (severity, category, file:line, recommendation, effort)
+- **`report.html`** — a self-contained, actionable dashboard generated from the JSON:
+  done-checklist persisted across reloads, severity/reviewer/category filters,
+  a **copy-paste fix prompt per finding** (drop it straight back into Claude Code),
+  markdown export of what's left, light/dark theme
+- **`report.md`** — a diffable checklist for PRs and issues
+
+The HTML is never hand-written — regenerate it anytime from the JSON, or merge several solo
+reviews into one combined report:
+
+```bash
+python3 ~/.claude/skills/review-report/scripts/generate_report.py \
+  reviews/2026-07-23-elon/report.json reviews/2026-07-23-linus/report.json -o reviews/combined.html
+```
+
+<br>
+
 ## Sample Output
 
 ```

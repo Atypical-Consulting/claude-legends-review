@@ -29,6 +29,7 @@ digraph review {
     "Read changed files fully" -> "Review Section 1: The Diff";
     "Review Section 1: The Diff" -> "Review Section 2: The Broader Picture";
     "Review Section 2: The Broader Picture" -> "Final Verdict & Ratings";
+    "Final Verdict & Ratings" -> "Step 3: Emit the actionable report (JSON + HTML)";
 }
 ```
 
@@ -116,6 +117,21 @@ Output the review in this exact structure:
 
 ---
 
+### Step 3: Emit the Actionable Report
+
+The terminal review scrolls away; the report is what the team acts on. After writing the review, turn it into the shared report format and render it — the review and the report must tell the same story (same problems, same severities, same count).
+
+1. Write `reviews/<yyyy-mm-dd>-elon/report.json` at the root of the reviewed repo. The full schema lives in the sibling `review-report` skill (`../review-report/SKILL.md` relative to this skill's directory — read it if you need more than this summary):
+   - Every numbered item from **Problems Found** becomes a finding: `severity` (critical|major|minor|info), `category` (security, correctness, performance, observability, testing, simplicity, …), `file`/`line`, `description` (why it matters), `recommendation` (the concrete change), `effort` (S|M|L). Items from **What I'd Delete** and **What's Missing** that warrant action become findings too.
+   - The reviewer object: `{"id": "elon", "name": "Elon Musk", "emoji": "🔥", "rating": X, "verdict": "<one-line verdict>", "hard_truth": "<The Hard Question>", "assessment": [<the Technical Assessment table, ratings as green|yellow|red>]}`.
+   - **Top 3 Actions** become `actions` (rank, title, effort).
+2. Render it — never write the HTML by hand: `python3 <skills-parent-dir>/review-report/scripts/generate_report.py reviews/<dir>/report.json`. The script lives in the `review-report` skill directory next to this one (fall back to `~/.claude/skills/review-report/scripts/generate_report.py`; if missing, tell the user to reinstall Legends Review).
+3. Open `report.html` in the browser (`open` on macOS, `xdg-open` on Linux) and give the user the path. The report carries a persistent done-checklist, severity/category filters, and a ready-to-paste fix prompt per finding.
+
+The Elon voice lives in `verdict`, `hard_truth`, and assessment notes. Keep `description` and `recommendation` professional — they feed fix prompts and issue trackers.
+
+---
+
 ## Tone Calibration
 
 **DO say:**
@@ -139,4 +155,5 @@ Output the review in this exact structure:
 - **Ignoring observability:** Can you debug this in production? Wrong log levels, missing structured properties, swallowed exceptions, no trace IDs — these are the things that turn a 5-minute fix into a 5-hour incident. Review them.
 - **Missing security implications:** Exception messages leaked to clients, secrets in logs, missing auth checks, information disclosure. These are the problems that become headlines. Check for them explicitly.
 - **Being mean without being useful:** Bluntness must come with actionable recommendations. "This is bad" without "do this instead" is worthless.
+- **A review without the report:** if `reviews/<date>-elon/report.json` wasn't written and rendered to HTML, the review evaporates when the terminal scrolls. And a report that diverges from the review (fewer findings, softened severities) lies to whoever acts on it.
 - **Ignoring the commit history:** Recent trajectory matters. A version bump after 5 heavy feature commits tells a different story than a version bump in isolation.

@@ -124,6 +124,15 @@ Phase 3 — Consensus: After debate, each reviewer states:
 - Their final rating (may adjust based on debate)
 - The ONE action they think matters most
 - What they learned from the other reviewers
+- Their surviving findings as a fenced ```json block:
+  {"reviewer": {"id", "name", "emoji", "rating", "verdict", "hard_truth",
+  "assessment": [{"area", "rating": "green|yellow|red", "notes"}]},
+  "findings": [{"id", "severity": "critical|major|minor|info", "category",
+  "file", "line", "description", "recommendation", "fix_hint", "effort": "S|M|L"}]}
+  Post-debate means post-debate: severities and findings reflect what survived
+  the argument, not the opening position. Keep description/recommendation
+  professional — they feed fix prompts. The persona voice lives in
+  verdict/hard_truth/notes.
 
 The debate should feel like three brilliant people arguing in a room —
 not polite agreement. They should challenge each other hard but fairly.
@@ -194,9 +203,25 @@ One uncomfortable insight from each reviewer that survived the debate:
 
 ---
 
+### Step 5: Emit the Actionable Report
+
+The debate produced three JSON blocks (Phase 3). The consensus deserves better than scrollback — assemble the common report and render it:
+
+1. Write `reviews/<yyyy-mm-dd>-legends/report.json` at the root of the reviewed repo. The full schema lives in the sibling `review-report` skill (`../review-report/SKILL.md` relative to this skill's directory):
+   - `reviewers`: the three reviewer objects with their FINAL (post-debate) ratings.
+   - `findings`: merge the three findings arrays, renumbered. When two reviewers surfaced the same issue, keep ONE finding — credit the sharper writeup as `reviewer` and the other(s) in `agreed_by`. Convergence is signal: those findings render with multiple badges and deserve priority.
+   - `consensus`: `{"rating": <agreed rating>, "agreements": [<Where They Agreed>], "disagreements": [{"topic", "resolution"}] from <Where They Fought>}`.
+   - `actions`: The Unified Top 5, with `champion` and `supported_by`.
+   - `review_type`: `"legends"`.
+2. Render it — never write the HTML by hand: `python3 <skills-parent-dir>/review-report/scripts/generate_report.py reviews/<dir>/report.json`. The script lives in the `review-report` skill directory next to this one (fall back to `~/.claude/skills/review-report/scripts/generate_report.py`).
+3. Open `report.html` in the browser (`open` on macOS, `xdg-open` on Linux) and give the user the path. The report carries the consensus, the debate outcomes, a persistent done-checklist, filters, and a ready-to-paste fix prompt per finding.
+
+---
+
 ## Common Mistakes
 
 - **Letting the team agree too quickly:** The value is in the debate. If all three agree on everything, push back — they're being polite, not honest.
 - **Skipping Phase 2:** Independent reviews without debate is just three separate reviews. The cross-pollination is the point.
 - **Lead implementing instead of waiting:** Let the teammates finish. Don't start synthesizing before Phase 3.
 - **Not giving enough context in spawn prompts:** Teammates don't inherit conversation history. Include ALL the review material in the spawn prompt.
+- **Skipping the report:** three reviews and a debate that end as scrollback are wasted. The consensus lives in `reviews/<date>-legends/report.json` + the rendered HTML — and the JSON must match the debate's outcome, including the findings that died in Phase 2 (they stay dead, don't resurrect them in the report).

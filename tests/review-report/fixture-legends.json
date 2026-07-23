@@ -1,0 +1,56 @@
+{
+  "schema": "legends-review/1",
+  "date": "2026-01-02",
+  "repo": "FixtureApp",
+  "branch": "feature/fixture",
+  "commit": "def5678",
+  "review_type": "legends",
+  "change_summary": "Fixture legends review — three reviewers, consensus, no real data.",
+  "reviewers": [
+    { "id": "elon", "name": "Elon Musk", "emoji": "🔥", "rating": 7,
+      "verdict": "Ship it, but delete the middleware layer.",
+      "hard_truth": "The architecture is fine. The velocity is not." },
+    { "id": "steve", "name": "Steve Jobs", "emoji": "🍎", "rating": 6,
+      "verdict": "Someone cared about this. Now care about the error messages too.",
+      "hard_truth": "This is a collection of endpoints, not a product." },
+    { "id": "linus", "name": "Linus Torvalds", "emoji": "🐧", "rating": 8,
+      "verdict": "The error handling is correct. That's rarer than you think.",
+      "hard_truth": "This will break at 3 AM and whoever is on call will curse your name." }
+  ],
+  "consensus": {
+    "rating": 7,
+    "agreements": ["Delete the middleware abstraction — it creates complexity without removing any."],
+    "disagreements": [
+      { "topic": "Delete the validation layer?", "resolution": "Linus won: it prevents a class of runtime errors." }
+    ]
+  },
+  "findings": [
+    {
+      "id": 1,
+      "reviewer": "elon",
+      "agreed_by": ["linus"],
+      "severity": "major",
+      "category": "simplicity",
+      "title": "Middleware abstraction earns nothing",
+      "file": "src/Api/Middleware.cs",
+      "line": 10,
+      "description": "One implementation, one caller, zero variation points.",
+      "recommendation": "Delete the layer and inline the call.",
+      "effort": "M"
+    },
+    {
+      "id": 2,
+      "reviewer": "steve",
+      "severity": "minor",
+      "category": "dx",
+      "title": "Error messages abandon the user",
+      "description": "A 400 with no body tells the integrator nothing.",
+      "recommendation": "Return a message that names the invalid field and the expected format.",
+      "effort": "S"
+    }
+  ],
+  "actions": [
+    { "rank": 1, "title": "Delete the middleware layer", "champion": "elon", "supported_by": ["linus"], "effort": "M", "finding_ids": [1] },
+    { "rank": 2, "title": "Rewrite the validation error responses", "champion": "steve", "effort": "S", "finding_ids": [2] }
+  ]
+}
