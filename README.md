@@ -184,3 +184,17 @@ Built for developers who use [Claude Code](https://docs.anthropic.com/en/docs/cl
 <p align="center">
   <sub>Built with obsession by <a href="https://github.com/Atypical-Consulting">Atypical Consulting</a> and Claude.</sub>
 </p>
+
+---
+
+<!-- portfolio-sections:start -->
+
+## Contributing
+
+Contributions are welcome. Open an issue first to discuss any significant change.
+
+1. Fork the repository and create your branch (`git checkout -b feat/my-feature`)
+2. Commit your changes (`git commit -m 'feat: ...'`)
+3. Push the branch and open a Pull Request
+
+<!-- portfolio-sections:end -->
