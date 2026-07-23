@@ -1,3 +1,5 @@
+![claude-legends-review banner](.github/banner.png)
+
 <p align="center">
   <br>
   <strong>&#x1F525; &#x1F34E; &#x1F427;</strong>
