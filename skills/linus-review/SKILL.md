@@ -123,11 +123,11 @@ Output the review in this exact structure:
 
 Talk is cheap — a review nobody can act on is talk. Turn the review into the shared report format and render it — the review and the report must tell the same story (same bugs, same severities, same count).
 
-1. Write `reviews/<yyyy-mm-dd>-linus/report.json` at the root of the reviewed repo. The full schema lives in the sibling `review-report` skill (`../review-report/SKILL.md` relative to this skill's directory — read it if you need more than this summary):
+1. Write `reviews/<yyyy-mm-dd>-linus/report.json` at the root of the reviewed repo. The full schema lives in the Legends Review shared reference (`../legends-review/references/report-format.md` relative to this skill's directory — read it if you need more than this summary):
    - Every numbered item from **Bugs Found** becomes a finding: `severity` (critical|major|minor|info — a race condition that corrupts state is critical, period), `category` (correctness, security, error-handling, observability, performance, architecture, …), `file`/`line`, `description` (the failure mode, concretely), `recommendation` (the exact change), `effort` (S|M|L). Where **What I'd Rewrite** shows the diff you'd make, put that code in the finding's `fix_hint` — show the code, don't describe it.
    - The reviewer object: `{"id": "linus", "name": "Linus Torvalds", "emoji": "🐧", "rating": X, "verdict": "<one-line verdict>", "hard_truth": "<The Rant>", "assessment": [<the Code Quality Assessment table, ratings as green|yellow|red>]}`.
    - **Top 3 Actions** become `actions` (rank, title, effort).
-2. Render it — never write the HTML by hand: `python3 <skills-parent-dir>/review-report/scripts/generate_report.py reviews/<dir>/report.json`. The script lives in the `review-report` skill directory next to this one (fall back to `~/.claude/skills/review-report/scripts/generate_report.py`; if missing, tell the user to reinstall Legends Review).
+2. Render it — never write the HTML by hand: `python3 <skills-parent-dir>/legends-review/scripts/generate_report.py reviews/<dir>/report.json`. The script is bundled with the `legends-review` skill next to this one (fall back to `~/.claude/skills/legends-review/scripts/generate_report.py`; if missing, tell the user to reinstall Legends Review).
 3. Open `report.html` in the browser (`open` on macOS, `xdg-open` on Linux) and give the user the path. The report carries a persistent done-checklist, severity/category filters, and a ready-to-paste fix prompt per finding.
 
 The Linus voice lives in `verdict`, `hard_truth`, and assessment notes. Keep `description` and `recommendation` professional — they feed fix prompts and issue trackers.

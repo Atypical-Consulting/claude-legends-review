@@ -1,31 +1,19 @@
----
-name: review-report
-description: >
-  Render, regenerate, or merge legends-review reports. Use whenever the user wants an HTML report
-  from an existing review report.json, wants to merge several individual persona reviews (elon,
-  jobs, linus) into one combined report, wants to re-export a review as markdown, or asks to
-  "regenerate the review report", "combine the reviews", or "make an HTML report of the review".
-  Also the reference for the shared report.json schema used by elon-review, jobs-review,
-  linus-review, and legends-review.
----
+# The report format — shared layer of the Legends Review suite
 
-# Review Report
-
-## Overview
-
-This is the shared reporting layer for the Legends Review skills. A review produces **data**
-(`report.json`); this skill's script renders that data into a **self-contained, actionable HTML
+This is the shared reporting layer for the Legends Review skills (`elon-review`, `jobs-review`,
+`linus-review`, `legends-review`). A review produces **data** (`report.json`); the generator
+bundled with the `legends-review` skill renders that data into a **self-contained, actionable HTML
 report** plus a diffable `report.md`. The HTML is never written or edited by hand — regenerate it
 from the JSON. That's what keeps the reports consistent across reviewers and across time.
 
 The same schema handles an individual review (one persona) and a common one (the three legends
-with consensus). The script also merges several individual `report.json` files into one combined
+with consensus). The generator also merges several individual `report.json` files into one combined
 report — so two solo reviews run on the same change can become a single common report after the fact.
 
 ## The generator
 
 ```bash
-python3 <this-skill-dir>/scripts/generate_report.py <report.json> [more.json ...] [-o out.html] [--lang en|fr]
+python3 <legends-review-skill-dir>/scripts/generate_report.py <report.json> [more.json ...] [-o out.html] [--lang en|fr]
 ```
 
 - One JSON → individual or consensus report. Several JSONs → merged report (reviewers combined,
@@ -93,7 +81,8 @@ omit what doesn't apply rather than inventing empty values.
       "description": "Why this matters — the concrete failure, not a vague concern.",
       "recommendation": "The specific change to make.",
       "fix_hint": "optional code or diff snippet",
-      "effort": "S"
+      "effort": "S",
+      "resolved": true
     }
   ],
   "actions": [
@@ -113,8 +102,16 @@ Field rules that make the report actionable rather than decorative:
   `documentation`, `testing`, `architecture`, `simplicity`.
 - **description** answers "why is this a problem"; **recommendation** answers "what exactly do I
   do about it". A finding without a concrete recommendation is an opinion, not a finding.
-- **file`/`line** whenever the finding points at code — they feed the copy-paste fix prompt.
+- **file**/**line** whenever the finding points at code — they feed the copy-paste fix prompt.
 - **effort** is `S | M | L` (under an hour / a session / a project).
+- **resolved** (optional bool) — set `true` once a finding has actually been fixed after the
+  review. The HTML renders its checkbox pre-checked (a viewer's manual toggle still wins, via
+  localStorage) and `report.md` renders `- [x]`. Pair it with a dated resolution note appended to
+  `description` so the report says *what* was done, not just that it was.
+- **Action-plan done state is derived**: an action renders checked when all the findings in its
+  `finding_ids` are `resolved` (an explicit `resolved` on the action overrides the derivation —
+  useful for actions not mapped to findings). Applies to the HTML plan, `report.md`, and the
+  in-page markdown export.
 - `consensus` exists only for legends (team) reviews. `agreed_by` marks findings that several
   reviewers converged on — they render with multiple reviewer badges and deserve priority.
 - The persona's voice lives in `verdict`, `hard_truth`, and assessment `notes`. Keep `description`

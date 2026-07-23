@@ -1,7 +1,7 @@
 ---
 name: legends-review
 description: >
-  Use when the user wants a comprehensive code review from multiple perspectives, or invokes a team-based review combining business, design, and engineering viewpoints with debate and consensus. Trigger this skill whenever the user asks for a "legends review", "team review", "full review", "review from all angles", or wants business + design + engineering perspectives debated together. Also trigger when the user wants Elon, Jobs, AND Linus to review the same code, or asks for a multi-perspective review with debate and consensus. This is the flagship skill — use it when no single persona is enough.
+  Use when the user wants a comprehensive code review from multiple perspectives, or invokes a team-based review combining business, design, and engineering viewpoints with debate and consensus. Trigger this skill whenever the user asks for a "legends review", "team review", "full review", "review from all angles", or wants business + design + engineering perspectives debated together. Also trigger when the user wants Elon, Jobs, AND Linus to review the same code, or asks for a multi-perspective review with debate and consensus. ALSO the home of the suite's shared report layer — trigger to render, regenerate, or merge existing review reports ("regenerate the review report", "combine the reviews", "make an HTML report from this report.json"): the schema reference and generator used by the solo elon/jobs/linus reviews are bundled here (references/report-format.md, scripts/generate_report.py). This is the flagship skill — use it when no single persona is enough.
 ---
 
 # Legends Review
@@ -207,13 +207,13 @@ One uncomfortable insight from each reviewer that survived the debate:
 
 The debate produced three JSON blocks (Phase 3). The consensus deserves better than scrollback — assemble the common report and render it:
 
-1. Write `reviews/<yyyy-mm-dd>-legends/report.json` at the root of the reviewed repo. The full schema lives in the sibling `review-report` skill (`../review-report/SKILL.md` relative to this skill's directory):
+1. Write `reviews/<yyyy-mm-dd>-legends/report.json` at the root of the reviewed repo. The full schema lives in this skill's reference (`references/report-format.md`):
    - `reviewers`: the three reviewer objects with their FINAL (post-debate) ratings.
    - `findings`: merge the three findings arrays, renumbered. When two reviewers surfaced the same issue, keep ONE finding — credit the sharper writeup as `reviewer` and the other(s) in `agreed_by`. Convergence is signal: those findings render with multiple badges and deserve priority.
    - `consensus`: `{"rating": <agreed rating>, "agreements": [<Where They Agreed>], "disagreements": [{"topic", "resolution"}] from <Where They Fought>}`.
    - `actions`: The Unified Top 5, with `champion` and `supported_by`.
    - `review_type`: `"legends"`.
-2. Render it — never write the HTML by hand: `python3 <skills-parent-dir>/review-report/scripts/generate_report.py reviews/<dir>/report.json`. The script lives in the `review-report` skill directory next to this one (fall back to `~/.claude/skills/review-report/scripts/generate_report.py`).
+2. Render it — never write the HTML by hand: `python3 <this-skill-dir>/scripts/generate_report.py reviews/<dir>/report.json`. The script is bundled with this skill (fall back to `~/.claude/skills/legends-review/scripts/generate_report.py`).
 3. Open `report.html` in the browser (`open` on macOS, `xdg-open` on Linux) and give the user the path. The report carries the consensus, the debate outcomes, a persistent done-checklist, filters, and a ready-to-paste fix prompt per finding.
 
 ---

@@ -135,6 +135,15 @@ def reviewer_by_id(r, rid):
     return next((rv for rv in r["reviewers"] if rv["id"] == rid), {"name": rid, "emoji": ""})
 
 
+def action_done(r, a):
+    """An action is done when explicitly resolved, else when all its finding_ids are resolved."""
+    if "resolved" in a:
+        return bool(a["resolved"])
+    ids = a.get("finding_ids") or []
+    by_id = {f.get("id"): f for f in r.get("findings", [])}
+    return bool(ids) and all(by_id.get(i, {}).get("resolved") for i in ids)
+
+
 def finding_card(f, r, L):
     rv = reviewer_by_id(r, f["reviewer"])
     loc = ""
@@ -146,7 +155,8 @@ def finding_card(f, r, L):
     effort = f'<span class="eff">{esc(f["effort"])}</span>' if f.get("effort") else ""
     cat = f'<span class="cat">{esc(f["category"])}</span>' if f.get("category") else ""
     return f"""<details class="finding" data-id="{f["id"]}" data-severity="{esc(f["severity"])}"
- data-reviewer="{esc(f["reviewer"])}" data-category="{esc(f.get("category", ""))}">
+ data-reviewer="{esc(f["reviewer"])}" data-category="{esc(f.get("category", ""))}"
+ data-resolved="{1 if f.get("resolved") else 0}">
 <summary>
 <input type="checkbox" class="done-box" aria-label="done" onclick="event.stopPropagation()">
 <span class="sev sev-{esc(f["severity"])}">{esc(L["severity"][f["severity"]])}</span>
@@ -225,7 +235,9 @@ def render_html(r, lang):
     actions_html = ""
     if r.get("actions"):
         items = "".join(
-            '<li><span class="box" aria-hidden="true"></span><span>'
+            ('<li class="done">' if action_done(r, a) else "<li>")
+            + '<span class="box' + (" done" if action_done(r, a) else "")
+            + '" aria-hidden="true">' + ("✓" if action_done(r, a) else "") + "</span><span>"
             + esc(a["title"])
             + (f' <span class="who">— {esc(L["champion"])} {esc(reviewer_by_id(r, a["champion"])["name"])}'
                + (f', {esc(L["supported"])} '
@@ -256,7 +268,8 @@ def render_html(r, lang):
         "findings": [{k: f.get(k) for k in ("id", "reviewer", "severity", "category", "title",
                                             "file", "line", "description", "recommendation",
                                             "fix_hint", "effort")} for f in findings],
-        "actions": [{"rank": a.get("rank"), "title": a["title"], "effort": a.get("effort")}
+        "actions": [{"rank": a.get("rank"), "title": a["title"], "effort": a.get("effort"),
+                     "done": action_done(r, a)}
                     for a in r.get("actions", [])],
     }
     data_json = json.dumps(data, ensure_ascii=False).replace("</", "<\\/")
@@ -334,6 +347,9 @@ def render_html(r, lang):
     font-size:14px; border-top:1px solid var(--grid); padding-top:9px; }}
   ul.steps li:first-child {{ border-top:0; padding-top:0; }}
   ul.steps .box {{ width:15px; height:15px; border:1.6px solid var(--axis); border-radius:4px; margin-top:2px; }}
+  ul.steps .box.done {{ background:var(--s3); border-color:var(--s3); color:#fff; font-size:11px;
+    line-height:15px; text-align:center; font-weight:700; }}
+  ul.steps li.done > span:nth-child(2) {{ text-decoration:line-through; color:var(--muted); }}
   ul.steps .who {{ color:var(--muted); font-size:12.5px; }}
   footer {{ font-size:12.5px; color:var(--muted); max-width:78ch; }}
   #toast {{ position:fixed; bottom:24px; left:50%; transform:translateX(-50%); background:var(--ink);
@@ -396,7 +412,7 @@ function refresh() {{
   const cat = document.getElementById('cat') ? document.getElementById('cat').value : '';
   let done = 0;
   findings.forEach(el => {{
-    const isDone = !!state[el.dataset.id];
+    const isDone = el.dataset.id in state ? !!state[el.dataset.id] : el.dataset.resolved === '1';
     el.classList.toggle('done', isDone);
     el.querySelector('.done-box').checked = isDone;
     if (isDone) done++;
@@ -454,7 +470,7 @@ document.getElementById('export-md').addEventListener('click', () => {{
   }});
   if (DATA.actions.length) {{
     lines.push('## Actions', '');
-    DATA.actions.forEach(a => lines.push((a.rank || '-') + '. ' + a.title + (a.effort ? ' (' + a.effort + ')' : '')));
+    DATA.actions.forEach(a => lines.push((a.rank || '-') + '. [' + (a.done ? 'x' : ' ') + '] ' + a.title + (a.effort ? ' (' + a.effort + ')' : '')));
   }}
   copyText(lines.join('\\n'));
 }});
@@ -491,14 +507,14 @@ def render_md(r, lang):
         for f in group:
             loc = f' — `{f["file"]}{":" + str(f["line"]) if f.get("line") else ""}`' if f.get("file") else ""
             eff = f' ({f["effort"]})' if f.get("effort") else ""
-            lines.append(f'- [ ] **{f["title"]}**{loc}{eff}')
+            lines.append(f'- [{"x" if f.get("resolved") else " "}] **{f["title"]}**{loc}{eff}')
             lines.append(f'  {f["recommendation"]}')
         lines.append("")
     if r.get("actions"):
         lines += [f'## {L["actions"]}', ""]
         for a in sorted(r["actions"], key=lambda a: a.get("rank", 99)):
             eff = f' ({a["effort"]})' if a.get("effort") else ""
-            lines.append(f'{a.get("rank", "-")}. {a["title"]}{eff}')
+            lines.append(f'{a.get("rank", "-")}. [{"x" if action_done(r, a) else " "}] {a["title"]}{eff}')
         lines.append("")
     lines.append(f'---\n{L["method"]}')
     return "\n".join(lines) + "\n"

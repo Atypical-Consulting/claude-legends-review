@@ -6,7 +6,7 @@
   "commit": "abc1234",
   "review_type": "solo",
   "change_summary": "Fixture solo review — no real data.",
-  "scope": "Golden-test fixture: every value below is asserted by tests/review-report/test.sh.",
+  "scope": "Golden-test fixture: every value below is asserted by tests/report-format/test.sh.",
   "reviewers": [
     {
       "id": "elon",
@@ -16,7 +16,11 @@
       "verdict": "Ship it, but delete the middleware layer.",
       "hard_truth": "The architecture is fine. The velocity is not.",
       "assessment": [
-        { "area": "Complexity", "rating": "yellow", "notes": "one layer too many" }
+        {
+          "area": "Complexity",
+          "rating": "yellow",
+          "notes": "one layer too many"
+        }
       ]
     }
   ],
@@ -46,7 +50,17 @@
     }
   ],
   "actions": [
-    { "rank": 1, "title": "Fix the exception leak before merge", "champion": "elon", "effort": "S", "finding_ids": [1] }
+    {
+      "rank": 1,
+      "title": "Fix the exception leak before merge",
+      "champion": "elon",
+      "effort": "S",
+      "finding_ids": [
+        1
+      ]
+    }
   ],
-  "praise": ["The test naming is genuinely clear."]
+  "praise": [
+    "The test naming is genuinely clear."
+  ]
 }

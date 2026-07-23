@@ -108,7 +108,7 @@ The HTML is never hand-written — regenerate it anytime from the JSON, or merge
 reviews into one combined report:
 
 ```bash
-python3 ~/.claude/skills/review-report/scripts/generate_report.py \
+python3 ~/.claude/skills/legends-review/scripts/generate_report.py \
   reviews/2026-07-23-elon/report.json reviews/2026-07-23-linus/report.json -o reviews/combined.html
 ```
 
