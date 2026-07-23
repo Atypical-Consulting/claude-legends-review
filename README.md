@@ -1,3 +1,22 @@
+<!-- portfolio-toc:start -->
+
+## Table of Contents
+
+- [Features](#features)
+- [Install](#install)
+- [Usage](#usage)
+- [The Reviewers](#the-reviewers)
+- [The Actionable Report](#the-actionable-report)
+- [Sample Output](#sample-output)
+- [Manual Install](#manual-install)
+- [Why Legends Review?](#why-legends-review)
+- [Requirements](#requirements)
+- [License](#license)
+- [Roadmap](#roadmap)
+- [Contributing](#contributing)
+
+<!-- portfolio-toc:end -->
+
 ![claude-legends-review banner](.github/banner.png)
 
 <p align="center">
