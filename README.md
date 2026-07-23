@@ -228,6 +228,14 @@ Built for developers who use [Claude Code](https://docs.anthropic.com/en/docs/cl
 - [Claude Code](https://docs.anthropic.com/en/docs/claude-code) CLI
 - For `/legends-review`: Agent Teams experimental feature enabled
 
+<!-- portfolio-techstack:start -->
+
+## Tech Stack
+
+- **Python**
+
+<!-- portfolio-techstack:end -->
+
 ## License
 
 [MIT](LICENSE) — do whatever you want.
