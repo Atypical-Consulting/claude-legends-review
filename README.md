@@ -26,6 +26,16 @@
 
 <br>
 
+## Features
+
+- **Four slash commands** — `/elon-review`, `/jobs-review`, `/linus-review` for solo perspectives, plus `/legends-review` to run all three with debate.
+- **Three distinct personas** — first-principles/business (Elon), design/DX (Jobs), and engineering rigor (Linus), each reviewing through its own lens and asking its own questions.
+- **Cross-review debate & consensus** — `/legends-review` runs solo reviews first, then has the three legends challenge, defend, and concede before producing a unified rating and top actions.
+- **Actionable reports in three formats** — every review writes `reviews/<date>-<reviewer>/report.json` (data), `report.html` (a self-contained interactive dashboard with filters, a done-checklist, and copy-paste fix prompts), and `report.md` (a diffable checklist for PRs).
+- **Report merging** — `generate_report.py` regenerates or merges several solo review JSONs into one combined HTML report.
+- **One-line install** — a `curl | bash` installer that drops the skills straight into `~/.claude/skills/`, no cloning or config required.
+- **Benchmarked reliability** — each skill is evaluated with automated benchmarks, with a claimed 100% pass rate vs. a 60-73% baseline.
+
 ## Install
 
 ```bash
@@ -33,6 +43,30 @@ curl -fsSL https://raw.githubusercontent.com/Atypical-Consulting/claude-legends-
 ```
 
 That's it. No cloning, no config, no dependencies.
+
+<br>
+
+## Usage
+
+Open [Claude Code](https://docs.anthropic.com/en/docs/claude-code) in a repo with pending changes and invoke a reviewer:
+
+```
+/elon-review
+```
+
+Or run the full tribunal (requires `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS`):
+
+```
+/legends-review
+```
+
+Each run writes its findings to `reviews/<date>-<reviewer>/`. Open `report.html` in a browser for the
+interactive dashboard, or regenerate/merge reports from the JSON at any time:
+
+```bash
+python3 ~/.claude/skills/legends-review/scripts/generate_report.py \
+  reviews/2026-07-23-elon/report.json reviews/2026-07-23-linus/report.json -o reviews/combined.html
+```
 
 <br>
 
@@ -184,6 +218,16 @@ Built for developers who use [Claude Code](https://docs.anthropic.com/en/docs/cl
 <p align="center">
   <sub>Built with obsession by <a href="https://github.com/Atypical-Consulting">Atypical Consulting</a> and Claude.</sub>
 </p>
+
+## Roadmap
+
+- [ ] Add more legend personas / reviewer archetypes beyond Elon, Jobs, and Linus
+- [ ] Support running reviews directly in CI (GitHub Actions) and posting summaries on PRs
+- [ ] Add trend tracking across reviews (is a repo's rating improving over time?)
+- [ ] Expand automated benchmark coverage beyond the current suite
+- [ ] Publish additional recipes for merging/filtering combined reports
+
+Track progress and proposals in the [open issues](https://github.com/Atypical-Consulting/claude-legends-review/issues).
 
 ---
 
