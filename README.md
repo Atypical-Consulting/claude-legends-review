@@ -53,7 +53,7 @@
 - **Actionable reports in three formats** — every review writes `reviews/<date>-<reviewer>/report.json` (data), `report.html` (a self-contained interactive dashboard with filters, a done-checklist, and copy-paste fix prompts), and `report.md` (a diffable checklist for PRs).
 - **Report merging** — `generate_report.py` regenerates or merges several solo review JSONs into one combined HTML report.
 - **One-line install** — a `curl | bash` installer that drops the skills straight into `~/.claude/skills/`, no cloning or config required.
-- **Benchmarked reliability** — each skill is evaluated with automated benchmarks, with a claimed 100% pass rate vs. a 60-73% baseline.
+- **Eval sets that ship with the skills** — every skill carries a versioned eval set (`skills/<skill>/evals/evals.json`), and the shared report generator is covered by a golden test (`tests/report-format/test.sh`). Behavioral claims here are meant to be re-run, not taken on faith.
 
 ## Install
 
@@ -220,7 +220,7 @@ Most AI code review tools give you one perspective. Legends Review gives you thr
 - **Deeper than a linter**: Finds security issues, observability gaps, DX problems, and architectural debt that static analysis misses
 - **Scales to context**: Cosmetic changes get a quick pass; new features get the full tribunal
 - **Exhaustive**: Each reviewer finds ALL issues (numbered, with severity), not just the first one
-- **Battle-tested**: Each skill evaluated with automated benchmarks — 100% pass rate vs 60-73% baseline
+- **Checkable**: Every skill ships its eval set and the report generator has a golden test — run them yourself
 
 Built for developers who use [Claude Code](https://docs.anthropic.com/en/docs/claude-code) and want more than "LGTM" on their pull requests.
 
