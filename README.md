@@ -132,6 +132,7 @@ Asks: Is this actually correct? What breaks at 3 AM? Show me the code.
 **All three.** They review independently, then debate in character until consensus.
 
 ```
+Step 0  → Framing pass (is this the right question? — before spending three agents)
 Phase 1 → Solo review (no groupthink)
 Phase 2 → Cross-review & debate (challenges, defenses, concessions)
 Phase 3 → Consensus (unified rating, top actions, hard truths)

@@ -23,6 +23,10 @@ Summon a team of three legendary tech reviewers — Elon Musk, Steve Jobs, and L
 ```dot
 digraph legends {
     rankdir=TB;
+    "Lead challenges the framing" -> "Framing holds?";
+    "Framing holds?" -> "Ask the user" [label="no"];
+    "Ask the user" -> "Lead gathers context";
+    "Framing holds?" -> "Lead gathers context" [label="yes"];
     "Lead gathers context" -> "Spawn 3 teammates";
     "Spawn 3 teammates" -> "Each reviewer works independently";
     "Each reviewer works independently" -> "Reviewers read each other's findings";
@@ -37,9 +41,45 @@ digraph legends {
 
 When this skill is invoked, you ARE the team lead. Follow these steps exactly:
 
+### Step 0: Challenge the Framing
+
+Three reviewers arguing brilliantly about the wrong artifact produce a beautiful, useless report.
+The debate in Phase 2 challenges *findings* — nothing downstream ever challenges the *question*.
+That's this step's job, and it belongs here because it's the one place where being wrong is still cheap.
+
+Work from the request verbatim, `git diff --stat`, and `git log --oneline -10`. That's deliberately
+shallow: the full file reads happen in Step 1, and there's no point paying for them before you know
+you're reading the right files.
+
+Answer four questions for yourself, a few words each:
+
+1. **What was I asked, and what does that assume?** "Review this code" quietly assumes the code
+   should exist, that the diff is the thing worth judging, and that review is the useful
+   intervention here. Any of the three can be false.
+2. **Is the diff the right unit of analysis?** A diff shows what moved, not what matters. The real
+   subject is sometimes the module the change touches, the feature it half-implements, or the
+   decision it encodes — and a diff-shaped review will miss all three.
+3. **What would make this review moot?** Generated files, a revert, a module scheduled for deletion,
+   a prototype that was never meant to survive. Say it now rather than after three full reviews.
+4. **What's the question actually worth asking?** One sentence. This is what you hand the team.
+
+**The gate.** If the framing holds, go straight to Step 1 without comment — announcing that a
+framing check found nothing is just noise in front of the user's actual request. If a premise is
+both load-bearing and probably wrong, stop and put it to them in a few lines:
+
+> This diff adds retry logic to the payment client, but that client is scheduled for replacement in
+> the Stripe migration (`docs/adr/012`). Reviewed as permanent code it will generate maintainability
+> findings nobody will ever action. Review the diff as-is, or review the migration path instead?
+
+Gate on premises, not on taste. "I'd have designed this differently" is a *finding* — that's exactly
+what Steve and Linus are for, and pre-empting them steals the review's whole point. "This review
+answers a question nobody asked" is a framing failure, and it's the only kind worth interrupting for.
+When in doubt, proceed: an unnecessary review costs tokens, an unnecessary interruption costs trust.
+
 ### Step 1: Gather Context
 
-Collect the review material that all teammates will need:
+Collect the review material that all teammates will need. Let Step 0's answer direct this — if the
+real subject turned out to be wider than the diff, gather the wider material:
 
 1. Run `git diff` to get the current changes (staged + unstaged)
 2. Run `git log --oneline -10` for recent commit trajectory
@@ -48,7 +88,7 @@ Collect the review material that all teammates will need:
 
 ### Step 2: Create the Agent Team
 
-Create an agent team with this exact prompt structure. Adapt the `[CONTEXT]` sections with the actual data gathered in Step 1:
+Create an agent team with this exact prompt structure. Adapt the `[INSERT: ...]` sections with the framing from Step 0 and the actual data gathered in Step 1:
 
 ```text
 Create an agent team to review code changes from three legendary perspectives.
@@ -96,6 +136,13 @@ Spawn three teammates:
    Rating X/10, one-line verdict, Top 3 Actions. Triage first: scale depth
    to change significance — skip Abstraction Autopsy/Tech Debt for cosmetic.
    Voice: Sharp, technically precise, occasionally caustic. Level 3/5 bluntness.
+
+FRAMING — the question this review exists to answer:
+[INSERT: Step 0's one-sentence question, plus any premise you flagged as shaky]
+This framing is the lead's opening bid, not a constraint. If reviewing the
+material convinces you the question is wrong, say so in your review and argue
+for the right one — a framing nobody is allowed to contest is just a bias with
+better paperwork.
 
 REVIEW MATERIAL:
 [INSERT: git diff output]
@@ -167,6 +214,9 @@ After the team reaches consensus, the lead writes:
 
 **What changed:** One-sentence summary.
 
+**The question we answered:** Step 0's question — and if a reviewer contested it successfully during
+the debate, the question that replaced it, so the shift is visible rather than silent.
+
 ### Individual Ratings
 
 | Reviewer | Rating | One-Line Verdict |
@@ -220,6 +270,8 @@ The debate produced three JSON blocks (Phase 3). The consensus deserves better t
 
 ## Common Mistakes
 
+- **Turning Step 0 into a toll booth:** The framing gate earns its place by firing rarely. A lead who opens every review with a paragraph of epistemics has replaced one unexamined premise with a new ritual. Silence is the expected outcome.
+- **Treating the framing as settled once written:** Step 0 exists to challenge an unstated premise, so shipping it as an unchallengeable one would be self-defeating. It goes to the team as a claim they can argue with.
 - **Letting the team agree too quickly:** The value is in the debate. If all three agree on everything, push back — they're being polite, not honest.
 - **Skipping Phase 2:** Independent reviews without debate is just three separate reviews. The cross-pollination is the point.
 - **Lead implementing instead of waiting:** Let the teammates finish. Don't start synthesizing before Phase 3.
